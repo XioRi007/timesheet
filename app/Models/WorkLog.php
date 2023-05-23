@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 
-class WorkLog extends Model
+class WorkLog extends BaseModel
 {
     use HasFactory;
 
