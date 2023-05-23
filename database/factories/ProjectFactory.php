@@ -17,8 +17,8 @@ class ProjectFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'=>fake()->name(),
-            'rate'=>fake()->numberBetween(0, 999.99)
+            'name' => fake()->text(20),
+            'rate' => fake()->numberBetween(0, 999.99)
         ];
     }
 }

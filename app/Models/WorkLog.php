@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
+use Illuminate\Validation\ValidationException;
 
 class WorkLog extends Model
 {
@@ -21,7 +23,7 @@ class WorkLog extends Model
         'rate',
         'hrs',
         'total',
-        'status'
+        'status',
     ];
 
     /**
@@ -30,7 +32,7 @@ class WorkLog extends Model
      * @var array
      */
     protected $casts = [
-        'status' => 'boolean',
+        'status' => 'boolean'
     ];
 
 
@@ -50,32 +52,61 @@ class WorkLog extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function getRateAttribute()
+    public static function GetRate($developer_id, $project_id): float
     {
-        if ($this->attributes['rate']) {
-            return $this->attributes['rate'];
-        }
-        if ($this->developer_id) {
-            $developer = Developer::find($this->developer_id);
-            if ($developer->rate) {
-                return $developer->rate;
+        if ($developer_id) {
+            $developer = Developer::find($developer_id);
+
+            if ($developer->rate != '0.00') {
+                return floatval($developer->rate);
             }
         }
-
-        if ($this->project_id) {
-            $project = Project::find($this->project_id);
-            if ($project->rate) {
-                return $project->rate;
+        if ($project_id) {
+            $project = Project::find($project_id);
+            if ($project->rate != '0.00') {
+                return floatval($project->rate);
             }
         }
-
-        if ($this->project_id) {
-            $client = Project::find($this->project_id)->client;
-            if ($client->rate) {
-                return $client->rate;
+        if ($project_id) {
+            $client = Project::find($project_id)->client;
+            if ($client->rate != '0.00') {
+                return floatval($client->rate);
             }
         }
+        return 0;
+    }
 
-        return null;
+    public function scopeCheckMaxHoursToday($query, string $developer_id)
+    {
+        $currentDate = Carbon::now()->format('Y-m-d');
+        $totalHours =$query->where('developer_id', $developer_id)
+            ->whereDate('created_at', $currentDate)
+            ->sum('hrs');
+
+        if($totalHours > 24){
+            throw ValidationException::withMessages(['hrs' => 'Developer must not work more than 24 hours/day']);
+        }
+        return $totalHours;
+    }
+
+
+    /**
+     *
+     */
+    public function scopeTotalPayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
+    {
+        return $query->where('status', true)
+            ->whereBetween('created_at', [$start, $end])
+            ->sum('total');
+    }
+
+    /**
+     *
+     */
+    public function scopeTotalUnpayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
+    {
+        return $query->where('status', false)
+            ->whereBetween('created_at', [$start, $end])
+            ->sum('total');
     }
 }

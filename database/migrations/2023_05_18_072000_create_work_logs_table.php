@@ -14,10 +14,10 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('developer_id')->constrained('developers');
             $table->foreignId('project_id')->constrained('projects');
-            $table->decimal('rate', 5, 2)->nullable();
+            $table->decimal('rate', 5, 2);
             $table->decimal('hrs', 5, 2);
             $table->decimal('total', 10, 2);
-            $table->boolean('status')->default(true);
+            $table->boolean('status')->default(false);
             $table->timestamps();
         });
     }

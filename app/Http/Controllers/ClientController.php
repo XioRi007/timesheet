@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ClientController extends Controller
 {
@@ -13,8 +15,10 @@ class ClientController extends Controller
      */
     public function index()
     {
-        $clients = Client::all();
-        return $clients;
+        $clients = Client::all('id', 'name', 'rate', 'status');
+        return Inertia::render('Client/Index', [
+            'clients' => $clients,
+        ]);
     }
 
     /**
@@ -22,11 +26,8 @@ class ClientController extends Controller
      */
     public function store(StoreClientRequest $request)
     {
-        $client = Client::create($request->validated());
-        //////////////////////////////////////////////////////
-
-//        redirect('clients.show', $client->id);
-        return response()->json(['id' => $client->id]);
+        Client::create($request->validated());
+        return to_route('clients.index');
     }
 
     /**
@@ -34,7 +35,7 @@ class ClientController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Client/Create');
     }
 
     /**
@@ -48,9 +49,11 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Client $client): Response
     {
-        //
+        return Inertia::render('Client/Edit', [
+            'client' => $client
+        ]);
     }
 
     /**
@@ -59,7 +62,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client)
     {
         $client->update($request->validated());
-//        Client::update($id, );
+        return to_route('clients.index');
     }
 
     /**
@@ -67,6 +70,14 @@ class ClientController extends Controller
      */
     public function destroy(Client $client)
     {
-        $client->delete();
+        try {
+            $client->delete();
+        } catch (\Throwable $e) {
+            if ($e->getCode() == 23000) {
+                throw new \Exception('You cannot delete client with projects');
+            } else {
+                throw $e;
+            }
+        }
     }
 }

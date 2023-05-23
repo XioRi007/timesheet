@@ -23,6 +23,7 @@ class UpdateProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'client_id' => 'numeric',
             'name' => 'string',
             'rate' => 'numeric|between:0,999.99',
             'status' => 'boolean'

@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
+use App\Models\Client;
 use App\Models\Project;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
@@ -13,18 +16,30 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
-        return $projects;
+        $projects = Project::with('client:id,name')
+            ->get(['name', 'client_id', 'rate', 'status', 'id']);
+
+        $transformedProjects = $projects->map(function ($project) {
+            return [
+                'name' => $project->name,
+                'client' => $project->client->name,
+                'rate' => $project->rate,
+                'status' => $project->status,
+                'id' => $project->id,
+            ];
+        });
+        return Inertia::render('Project/Index', [
+            'projects' => $transformedProjects,
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreProjectRequest $request)
+    public function store(StoreProjectRequest $request): RedirectResponse
     {
-        $project = Project::create($request->validated());
-        return $project->id;
-        //////////////////////////////////////////////////////
+        Project::create($request->validated());
+        return to_route('projects.index');
     }
 
     /**
@@ -32,7 +47,10 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        $clients = Client::all('id', 'name');
+        return Inertia::render('Project/Create', [
+            'clients' => $clients
+        ]);
     }
 
     /**
@@ -46,17 +64,22 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Project $project)
     {
-        //
+        $clients = Client::all('id', 'name');
+        return Inertia::render('Project/Edit', [
+            'project' => $project,
+            'clients' => $clients
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Project $project)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
+        return to_route('projects.index');
     }
 
     /**
@@ -64,6 +87,14 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
-        $project->delete();
+        try {
+            $project->delete();
+        } catch (\Throwable $e) {
+            if ($e->getCode() == 23000) {
+                throw new \Exception('You cannot delete project with work logs');
+            } else {
+                throw $e;
+            }
+        }
     }
 }

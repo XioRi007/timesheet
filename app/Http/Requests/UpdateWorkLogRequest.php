@@ -23,10 +23,11 @@ class UpdateWorkLogRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'developer_id' => 'numeric',
+            'project_id' => 'numeric',
             'rate' => 'numeric|between:0,999.99',
             'hrs' => 'numeric|between:0,999.99',
             'total' => 'numeric|between:0,99999999.99',
-            'status' => 'boolean'
-        ];
+            'status' => 'boolean'];
     }
 }

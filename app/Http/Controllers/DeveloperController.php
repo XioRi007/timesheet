@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDeveloperRequest;
 use App\Http\Requests\UpdateDeveloperRequest;
 use App\Models\Developer;
+use Inertia\Inertia;
 
 class DeveloperController extends Controller
 {
@@ -13,8 +14,10 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = Developer::all();
-        return $developers;
+        $developers = Developer::all('first_name', 'last_name', 'rate', 'rate_percent', 'status', 'id');
+        return Inertia::render('Developer/Index', [
+            'developers' => $developers,
+        ]);
     }
 
     /**
@@ -22,8 +25,8 @@ class DeveloperController extends Controller
      */
     public function store(StoreDeveloperRequest $request)
     {
-        $developer = Developer::create($request->validated());
-        return $developer->id;
+        Developer::create($request->validated());
+        return to_route('developers.index');
     }
 
     /**
@@ -31,7 +34,7 @@ class DeveloperController extends Controller
      */
     public function create()
     {
-        //
+        return Inertia::render('Developer/Create');
     }
 
     /**
@@ -47,7 +50,9 @@ class DeveloperController extends Controller
      */
     public function edit(Developer $developer)
     {
-        //
+        return Inertia::render('Developer/Edit', [
+            'developer' => $developer
+        ]);
     }
 
     /**
@@ -56,6 +61,7 @@ class DeveloperController extends Controller
     public function update(UpdateDeveloperRequest $request, Developer $developer)
     {
         $developer->update($request->validated());
+        return to_route('developers.index');
     }
 
     /**
@@ -63,6 +69,14 @@ class DeveloperController extends Controller
      */
     public function destroy(Developer $developer)
     {
-        $developer->delete();
+        try {
+            $developer->delete();
+        } catch (\Throwable $e) {
+            if ($e->getCode() == 23000) {
+                throw new \Exception('You cannot delete developer with work logs');
+            } else {
+                throw $e;
+            }
+        }
     }
 }

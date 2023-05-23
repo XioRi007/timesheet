@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Client;
 use App\Models\Developer;
 use App\Models\Project;
+use App\Models\User;
 use App\Models\WorkLog;
 use Illuminate\Database\Seeder;
 
@@ -30,5 +31,9 @@ class DatabaseSeeder extends Seeder
                 'project_id' => rand(1, 5)
             ]);
         }
+        User::factory()->create([
+            'name' => 'admin',
+            'email' => 'admin@email.com'
+        ]);
     }
 }
