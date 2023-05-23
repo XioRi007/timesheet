@@ -7,12 +7,12 @@ import {resolvePageComponent} from 'laravel-vite-plugin/inertia-helpers'
 import {ZiggyVue} from '../../vendor/tightenco/ziggy/dist/vue.m'
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import {faBackward, faForward, faPencil, faPlus, faTrashCan} from '@fortawesome/free-solid-svg-icons'
+import {faBackward, faForward, faPencil, faPlus, faTrashCan, faXmark} from '@fortawesome/free-solid-svg-icons'
 import {defineRule} from 'vee-validate'
 import AllRules from '@vee-validate/rules'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
-library.add(faBackward, faForward, faPencil, faTrashCan, faPlus)
+library.add(faBackward, faForward, faPencil, faTrashCan, faPlus, faXmark)
 
 Object.keys(AllRules).forEach(rule => {
   defineRule(rule, AllRules[rule])
