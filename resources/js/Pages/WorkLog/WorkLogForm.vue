@@ -47,7 +47,7 @@ const schema = yup.object({
   project_id: yup.number().required(),
   rate: maxDecimalPlaces(2).min(0).max(999.99).typeError('rate is required'),
   hrs: maxDecimalPlaces(2).min(0.1).max(999.99).typeError('hours are required'),
-  total: maxDecimalPlaces(2).min(0.1).max(99999999.99).typeError('total is required'),
+  total: maxDecimalPlaces(2).min(0).max(99999999.99).typeError('total is required'),
   status: yup.string().required().oneOf(["true", "false"]),
 })
 const form = useForm(props.worklog)
