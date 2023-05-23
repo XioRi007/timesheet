@@ -76,14 +76,15 @@ class WorkLog extends Model
         return 0;
     }
 
-    public function scopeCheckMaxHoursToday($query, string $developer_id)
+    public function scopeCheckMaxHoursToday($query, string $developer_id, float $hrs, string $id='')
     {
         $currentDate = Carbon::now()->format('Y-m-d');
         $totalHours =$query->where('developer_id', $developer_id)
             ->whereDate('created_at', $currentDate)
+            ->where('id', '<>', $id)
             ->sum('hrs');
 
-        if($totalHours > 24){
+        if($totalHours+$hrs > 24){
             throw ValidationException::withMessages(['hrs' => 'Developer must not work more than 24 hours/day']);
         }
         return $totalHours;
