@@ -20,7 +20,6 @@ class DeveloperFactory extends Factory
             'first_name'=>fake()->firstName(),
             'last_name'=>fake()->lastName(),
             'rate'=>fake()->numberBetween(0, 999.99),
-            'rate_percent'=>fake()->numberBetween(0, 9.99),
         ];
     }
 }

@@ -26,7 +26,6 @@ class StoreDeveloperRequest extends FormRequest
             'first_name' => 'required|string',
             'last_name' => 'required|string',
             'rate' => 'required|numeric|between:0,999.99',
-            'rate_percent' => 'required|numeric|between:0,9.99'
         ];
     }
 }

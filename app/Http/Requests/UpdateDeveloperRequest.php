@@ -26,7 +26,6 @@ class UpdateDeveloperRequest extends FormRequest
             'first_name' => 'string',
             'last_name' => 'string',
             'rate' => 'numeric|between:0,999.99',
-            'rate_percent' => 'numeric|between:0,9.99',
             'status' => 'boolean'
         ];
     }

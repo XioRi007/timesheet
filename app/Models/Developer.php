@@ -19,7 +19,6 @@ class Developer extends Model
         'first_name',
         'last_name',
         'rate',
-        'rate_percent',
         'status'
     ];
 

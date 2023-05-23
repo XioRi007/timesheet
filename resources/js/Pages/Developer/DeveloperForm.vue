@@ -31,7 +31,6 @@ const schema = yup.object({
   first_name: yup.string().required(),
   last_name: yup.string().required(),
   rate: maxDecimalPlaces(2).min(0).max(999.99).typeError('rate is required'),
-  rate_percent: maxDecimalPlaces(2).min(0).max(9.99).typeError('rate percent is required'),
   status: yup.string().required().oneOf(['true', 'false']),
 })
 const form = useForm(props.developer)
@@ -95,19 +94,6 @@ const submit = async () => {
         type="number"
       />
       <InputError :message="form.errors.rate" class="mt-2"/>
-    </div>
-
-    <div>
-      <InputLabel for="rate" value="Rate percent"/>
-      <TextInput
-        id="rate"
-        v-model="form.rate_percent"
-        autocomplete="rate"
-        class="mt-1 block w-full"
-        step="0.01"
-        type="number"
-      />
-      <InputError :message="form.errors.rate_percent" class="mt-2"/>
     </div>
 
     <div v-show="route().current('developers.edit')">

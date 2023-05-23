@@ -14,7 +14,7 @@ class DeveloperController extends Controller
      */
     public function index()
     {
-        $developers = Developer::all('first_name', 'last_name', 'rate', 'rate_percent', 'status', 'id');
+        $developers = Developer::all('first_name', 'last_name', 'rate', 'status', 'id');
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
         ]);
