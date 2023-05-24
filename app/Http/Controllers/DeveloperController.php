@@ -18,7 +18,6 @@ class DeveloperController extends Controller
         $developers = Developer::all('first_name', 'last_name', 'rate', 'status', 'id');
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
-            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -28,7 +27,7 @@ class DeveloperController extends Controller
     public function store(StoreDeveloperRequest $request)
     {
         Developer::create($request->validated());
-        return to_route('developers.index', ['message'=>'Developer was successfully created']);
+        return to_route('developers.index');
     }
 
     /**
@@ -63,7 +62,7 @@ class DeveloperController extends Controller
     public function update(UpdateDeveloperRequest $request, Developer $developer)
     {
         $developer->update($request->validated());
-        return to_route('developers.index', ['message'=>'Developer was successfully updated']);
+        return to_route('developers.index');
     }
 
     /**

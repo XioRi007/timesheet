@@ -31,7 +31,6 @@ class ProjectController extends Controller
         });
         return Inertia::render('Project/Index', [
             'projects' => $transformedProjects,
-            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -41,7 +40,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         Project::create($request->validated());
-        return to_route('projects.index', ['message'=>'Project was successfully created']);
+        return to_route('projects.index');
     }
 
     /**
@@ -81,7 +80,7 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
-        return to_route('projects.index', ['message'=>'Project was successfully updated']);
+        return to_route('projects.index');
     }
 
     /**

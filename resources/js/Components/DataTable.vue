@@ -3,6 +3,7 @@ import {Link, router} from '@inertiajs/vue3'
 import {ref} from "vue"
 import DeleteItemModal from "@/Components/DeleteItemModal.vue"
 import axios from "axios"
+import {createToast, showToast} from "@/useToast.js"
 
 const props = defineProps({
   data: {
@@ -43,12 +44,10 @@ const deleteItem = async (item) => {
   try {
     await axios.delete(route(props.deleteActionLink, item))
     deletedItem.value = null
-    router.visit(route(props.redirectLink), {
-      data: {
-        message: ` ${props.entityName.toProperCase()} was successfully deleted`
-      }
-    })
+    showToast(`${props.entityName.toProperCase()} was successfully deleted`)
+    router.reload()
   } catch (err) {
+    showToast(err.response.data.message, 'error')
     console.log(err.response.data.message)
     deleteError.value = err.response.data.message
   }

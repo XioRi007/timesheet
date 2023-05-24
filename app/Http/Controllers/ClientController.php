@@ -19,7 +19,6 @@ class ClientController extends Controller
         $clients = Client::all('id', 'name', 'rate', 'status');
         return Inertia::render('Client/Index', [
             'clients' => $clients,
-            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -29,7 +28,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         Client::create($request->validated());
-        return to_route('clients.index', ['message'=>'Client was successfully created']);
+        return to_route('clients.index');
     }
 
     /**
@@ -64,7 +63,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client)
     {
         $client->update($request->validated());
-        return to_route('clients.index', ['message'=>'Client was successfully updated']);
+        return to_route('clients.index');
     }
 
     /**

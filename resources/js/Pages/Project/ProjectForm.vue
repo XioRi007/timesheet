@@ -9,6 +9,7 @@ import Toggle from "@/Components/Toggle.vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {toast} from "vue3-toastify"
+import {createToast, showToast} from "@/useToast.js"
 
 const props = defineProps({
   submitRoute: {
@@ -44,15 +45,13 @@ const submit = async () => {
     form.status = form.status === true
     if (route().current('projects.edit')) {
       form.put(props.submitRoute)
+      createToast('Project was successfully updated')
     } else {
       form.post(props.submitRoute)
+      createToast('Project was successfully created')
     }
   } catch (err) {
-    toast("Fill the form correctly", {
-      type: 'error',
-      autoClose: 5000,
-      position: toast.POSITION.BOTTOM_RIGHT,
-    });
+    showToast('Fill the form correctly', 'error')
     err.inner.forEach((element) => {
       form.setError(element.path, element.message)
     })
