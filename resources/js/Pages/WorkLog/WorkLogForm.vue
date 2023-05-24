@@ -9,7 +9,6 @@ import Toggle from "@/Components/Toggle.vue"
 import {onMounted} from "vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
-import {toast} from "vue3-toastify"
 import {createToast, showToast} from "@/useToast.js"
 
 const props = defineProps({
@@ -56,8 +55,10 @@ const form = useForm(props.worklog)
 onMounted(() => {
   form.defaults()
   update()
-  if(props.worklog.total)
+  if (props.worklog.total)
     form.total = props.worklog.total
+  if (props.worklog.rate)
+    form.rate = props.worklog.rate
 })
 const submit = async () => {
   try {
@@ -88,9 +89,7 @@ const update = () => {
   if (props.project) {
     form.project_id = props.project
   }
-  if (props.rate) {
-    form.rate = props.rate
-  }
+  form.rate = props.rate
   updateTotal()
 }
 const changeUrl = (e) => {
