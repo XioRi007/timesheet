@@ -103,7 +103,7 @@ class WorkLogController extends Controller
      */
     public function update(UpdateWorkLogRequest $request, WorkLog $worklog)
     {
-        WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id);
+        WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id, $worklog->created_at);
         $worklog->update($request->validated());
         return to_route('worklogs.index');
     }

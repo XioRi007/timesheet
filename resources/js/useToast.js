@@ -1,6 +1,9 @@
 import {onMounted} from "vue"
 import {toast} from "vue3-toastify"
 
+/**
+ * Shows toast from localstorage
+ */
 export const useToast = () => {
   onMounted(() => {
     if (localStorage.getItem('message')) {
@@ -11,11 +14,20 @@ export const useToast = () => {
     }
   })
 }
-
+/**
+ * Saves toast on localstorage
+ * @param  message
+ * @param  type
+ */
 export const createToast = (message, type='success') => {
   localStorage.setItem('message', JSON.stringify({message, type}))
 }
 
+/**
+ * Instantly shows toast
+ * @param  message
+ * @param  type
+ */
 export const showToast = (message, type='success') => {
 
   toast(message, {

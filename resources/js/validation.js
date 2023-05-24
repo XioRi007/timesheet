@@ -1,5 +1,10 @@
 import * as yup from "yup"
 
+/**
+ * Validation rule for max numbers after dot
+ * @param  max
+ * @returns  {NumberSchema<NonNullable<number | undefined>, AnyObject, undefined, "">}
+ */
 export const maxDecimalPlaces = (max) => {
   return yup
     .number()

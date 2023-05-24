@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 
+/**
+ * Orders by creation date
+ */
 class OrderByCreatedAtScope implements Scope
 {
     public function apply(Builder $builder, Model $model)

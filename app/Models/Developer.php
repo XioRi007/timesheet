@@ -49,7 +49,10 @@ class Developer extends BaseModel
     }
 
     /**
-     *
+     * Returns developer name and array of hours worked in month
+     * @param  $startOfMonth
+     * @param  $endOfMonth
+     * @return  array
      */
     public static function getDevelopersWorkLogHoursByMonth($startOfMonth, $endOfMonth): array
     {

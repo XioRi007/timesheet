@@ -47,6 +47,7 @@ const deleteItem = async (item) => {
     showToast(`${props.entityName.toProperCase()} was successfully deleted`)
     router.reload()
   } catch (err) {
+    console.log(err)
     showToast(err.response.data.message, 'error')
     console.log(err.response.data.message)
     deleteError.value = err.response.data.message
