@@ -55,6 +55,8 @@ const form = useForm(props.worklog)
 onMounted(() => {
   form.defaults()
   update()
+  if(props.worklog.total)
+    form.total = props.worklog.total
 })
 const submit = async () => {
   try {
