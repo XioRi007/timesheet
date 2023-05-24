@@ -47,7 +47,7 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
-        return to_route('worklogs.index', ['message'=>'Wor Log was successfully created']);
+        return to_route('worklogs.index', ['message'=>'Work Log was successfully created']);
     }
 
     /**
@@ -106,7 +106,7 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id);
         $worklog->update($request->validated());
-        return to_route('worklogs.index', ['message'=>'Wor Log was successfully updated']);
+        return to_route('worklogs.index', ['message'=>'Work Log was successfully updated']);
     }
 
     /**
