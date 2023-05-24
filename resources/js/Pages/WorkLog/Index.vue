@@ -34,6 +34,7 @@ useToast(props);
               delete-action-link="worklogs.destroy"
               edit-action-link="worklogs.edit"
               entity-name="work log"
+              redirect-link="worklogs.index"
             />
           </div>
         </div>

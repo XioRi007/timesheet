@@ -33,6 +33,7 @@ useToast(props);
               delete-action-link="clients.destroy"
               edit-action-link="clients.edit"
               entity-name="client"
+              redirect-link="clients.index"
             />
           </div>
         </div>

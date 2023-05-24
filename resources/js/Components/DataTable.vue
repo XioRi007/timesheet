@@ -29,17 +29,25 @@ const props = defineProps({
   statusText: {
     type: Array,
     default: ['Active', 'Inactive']
-  }
+  },
+  redirectLink: {
+    type: String,
+    required: true
+  },
+
 })
 const columnNames = props.data.length ? Object.keys(props.data[0]).filter(key => key !== 'id') : []
 const deleteError = ref(null)
 const deletedItem = ref(null)
-
 const deleteItem = async (item) => {
   try {
     await axios.delete(route(props.deleteActionLink, item))
     deletedItem.value = null
-    router.reload()
+    router.visit(route(props.redirectLink), {
+      data: {
+        message: ` ${props.entityName.toProperCase()} was successfully deleted`
+      }
+    })
   } catch (err) {
     console.log(err.response.data.message)
     deleteError.value = err.response.data.message
