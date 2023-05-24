@@ -10,7 +10,6 @@ use App\Models\WorkLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class WorkLogController extends Controller
@@ -18,7 +17,7 @@ class WorkLogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $workLogs = WorkLog::with('developer:id,first_name,last_name')
             ->with('project:id,name')
@@ -37,6 +36,7 @@ class WorkLogController extends Controller
         });
         return Inertia::render('WorkLog/Index', [
             'worklogs' => $transformedWorkLogs,
+            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -47,7 +47,7 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
-        return to_route('worklogs.index');
+        return to_route('worklogs.index', ['message'=>'Wor Log was successfully created']);
     }
 
     /**
@@ -106,7 +106,7 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id);
         $worklog->update($request->validated());
-        return to_route('worklogs.index');
+        return to_route('worklogs.index', ['message'=>'Wor Log was successfully updated']);
     }
 
     /**

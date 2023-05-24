@@ -182,3 +182,8 @@ const showingNavigationDropdown = ref(false)
     </div>
   </div>
 </template>
+<style>
+/*.Toastify__toast-container {*/
+/*    width: fit-content;*/
+/*}*/
+</style>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,11 +14,12 @@ class ClientController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $clients = Client::all('id', 'name', 'rate', 'status');
         return Inertia::render('Client/Index', [
             'clients' => $clients,
+            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -27,7 +29,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request)
     {
         Client::create($request->validated());
-        return to_route('clients.index');
+        return to_route('clients.index', ['message'=>'Client was successfully created']);
     }
 
     /**
@@ -62,7 +64,7 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client)
     {
         $client->update($request->validated());
-        return to_route('clients.index');
+        return to_route('clients.index', ['message'=>'Client was successfully updated']);
     }
 
     /**

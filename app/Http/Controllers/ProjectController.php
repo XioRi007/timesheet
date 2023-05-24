@@ -8,13 +8,14 @@ use App\Models\Client;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class ProjectController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $projects = Project::with('client:id,name')
             ->get(['name', 'client_id', 'rate', 'status', 'id']);
@@ -30,6 +31,7 @@ class ProjectController extends Controller
         });
         return Inertia::render('Project/Index', [
             'projects' => $transformedProjects,
+            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -39,7 +41,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         Project::create($request->validated());
-        return to_route('projects.index');
+        return to_route('projects.index', ['message'=>'Project was successfully created']);
     }
 
     /**
@@ -79,7 +81,7 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
-        return to_route('projects.index');
+        return to_route('projects.index', ['message'=>'Project was successfully updated']);
     }
 
     /**

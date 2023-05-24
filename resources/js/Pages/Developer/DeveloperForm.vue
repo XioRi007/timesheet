@@ -8,6 +8,7 @@ import SecondaryButton from "@/Components/SecondaryButton.vue"
 import Toggle from "@/Components/Toggle.vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
+import {toast} from "vue3-toastify"
 
 const props = defineProps({
   submitRoute: {
@@ -46,7 +47,11 @@ const submit = async () => {
       form.post(props.submitRoute)
     }
   } catch (err) {
-    console.log(err)
+    toast("Fill the form correctly", {
+      type: 'error',
+      autoClose: 5000,
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
     err.inner.forEach((element) => {
       form.setError(element.path, element.message)
     })

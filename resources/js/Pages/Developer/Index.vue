@@ -3,6 +3,14 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import {Head} from '@inertiajs/vue3'
 import DataTable from "@/Components/DataTable.vue"
 import Title from "@/Components/Title.vue"
+import {useToast} from "@/useToast.js"
+
+const props = defineProps({
+  message: {
+    type: String
+  }
+});
+useToast(props);
 </script>
 
 <template>

@@ -6,17 +6,19 @@ use App\Http\Requests\StoreDeveloperRequest;
 use App\Http\Requests\UpdateDeveloperRequest;
 use App\Models\Developer;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
 
 class DeveloperController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $developers = Developer::all('first_name', 'last_name', 'rate', 'status', 'id');
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
+            'message' =>$this->getMessage($request)
         ]);
     }
 
@@ -26,7 +28,7 @@ class DeveloperController extends Controller
     public function store(StoreDeveloperRequest $request)
     {
         Developer::create($request->validated());
-        return to_route('developers.index');
+        return to_route('developers.index', ['message'=>'Developer was successfully created']);
     }
 
     /**
@@ -61,7 +63,7 @@ class DeveloperController extends Controller
     public function update(UpdateDeveloperRequest $request, Developer $developer)
     {
         $developer->update($request->validated());
-        return to_route('developers.index');
+        return to_route('developers.index', ['message'=>'Developer was successfully updated']);
     }
 
     /**
