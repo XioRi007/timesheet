@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .Toastify__toast-container {
-    width: fit-content;
+    width: 400px;
 }
