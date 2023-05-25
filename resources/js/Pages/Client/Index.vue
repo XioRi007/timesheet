@@ -34,6 +34,8 @@ useToast();
               edit-action-link="clients.edit"
               entity-name="client"
               redirect-link="clients.index"
+              :column="$page.props.column"
+              :ascending="$page.props.ascending"
             />
           </div>
         </div>

@@ -33,7 +33,7 @@ const props = defineProps({
   }
 })
 
-const form = useForm(props.filterParams)
+const form = useForm(Object.keys(props.filterParams).length ? props.filterParams : defaultParams)
 form.defaults(defaultParams)
 const submit = async () => {
   try {
@@ -50,13 +50,21 @@ const submit = async () => {
   }
 
 }
+const reset = () => {
+  form.reset()
+  router.get('', {
+    filter: form.data(),
+    column: null,
+    ascending: null
+  })
+}
 
 </script>
 
 <template>
   <form novalidate class="flex grid-rows-1 mb-6 items-end" @submit.prevent="submit">
 
-    <div class="mr-6">
+    <div class="mr-2 w-30">
       <InputLabel for="created_at" value="Date"/>
       <DatePicker
         id="created_at"
@@ -64,7 +72,7 @@ const submit = async () => {
         class="mt-1 block w-full"
       />
     </div>
-    <div class="w-44 mr-6">
+    <div class="w-40 mr-2">
       <InputLabel for="developer" value="Developer"/>
       <select id="developer"
               v-model="form.developer_id"
@@ -76,7 +84,7 @@ const submit = async () => {
       </select>
     </div>
 
-    <div class="w-44 mr-6">
+    <div class="w-40 mr-2">
       <InputLabel for="project" value="Project"/>
       <select id="project"
               v-model="form.project_id"
@@ -88,7 +96,7 @@ const submit = async () => {
       </select>
     </div>
 
-    <div class="w-20 mr-6">
+    <div class="w-40 mr-2">
       <InputLabel for="rate" value="Rate"/>
       <TextInput
         id="rate"
@@ -100,7 +108,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="w-20 mr-6">
+    <div class="w-40 mr-2">
       <InputLabel for="rate" value="Hours"/>
       <TextInput
         id="hrs"
@@ -112,7 +120,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="w-24 mr-6">
+    <div class="w-36 mr-2">
       <InputLabel for="total" value="Total"/>
       <TextInput
         id="total"
@@ -124,7 +132,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="mr-6 w-40">
+    <div class="mr-2 w-32">
       <InputLabel for="status" value="Status"/>
       <select
         id="status"
@@ -138,8 +146,10 @@ const submit = async () => {
       </select>
       <InputError :message="form.errors.status" class="mt-2"/>
     </div>
-    <PrimaryButton :disabled="form.processing" class="mr-2" type="submit">Filter</PrimaryButton>
-    <SecondaryButton :disabled="form.processing" @click="form.reset();submit()">Reset</SecondaryButton>
+    <div class="w-1/6 flex justify-end">
+      <PrimaryButton :disabled="form.processing" class="mr-2 h-10 w-20" type="submit">Filter</PrimaryButton>
+      <SecondaryButton :disabled="form.processing" class="h-10 w-20" @click="reset">Reset</SecondaryButton>
+    </div>
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error" />
 

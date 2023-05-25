@@ -19,22 +19,22 @@ class WorkLogController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->query->has('filter')) {
-            $filterParams = $request->query('filter');
-        } else {
-            $filterParams = [];
-        }
+        $query = $this->ParseQuery($request);
+        $filterParams = $query['filterParams'];
+        $column = $query['column'];
+        $ascending = $query['ascending'];
         $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
         $projects = Project::all('id', 'name');
         $workLogs = WorkLog::with('developer:id,first_name,last_name')
             ->with('project:id,name')
             ->filter($filterParams)
+            ->sort($column, $ascending)
             ->get(['created_at', 'project_id', 'developer_id', 'rate', 'status', 'hrs', 'total', 'id']);
         $transformedWorkLogs = $workLogs->map(function ($log) {
             return [
-                'date' => Carbon::parse($log->created_at)->toDateString(),
-                'developer' => $log->developer->full_name,
-                'project' => $log->project->name,
+                'created_at' => Carbon::parse($log->created_at)->toDateString(),
+                'developer.full_name' => $log->developer->full_name,
+                'project.name' => $log->project->name,
                 'rate' => $log->rate,
                 'hrs' => $log->hrs,
                 'total' => $log->total,
@@ -46,7 +46,9 @@ class WorkLogController extends Controller
             'worklogs' => $transformedWorkLogs,
             'developers' => $developers,
             'projects' => $projects,
-            'filterParams'=>$filterParams
+            'filterParams' => $filterParams,
+            'column' => $column,
+            'ascending' => $ascending == 'asc',
         ]);
     }
 

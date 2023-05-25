@@ -34,6 +34,9 @@ useToast();
               edit-action-link="projects.edit"
               entity-name="project"
               redirect-link="projects.index"
+              :column="$page.props.column"
+              :ascending="$page.props.ascending"
+              :_column-names="['name', 'client', 'rate', 'status']"
             />
           </div>
         </div>

@@ -15,16 +15,18 @@ class DeveloperController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->query->has('filter')) {
-            $filterParams = $request->query('filter');
-        } else {
-            $filterParams = [];
-        }
+        $query = $this->ParseQuery($request);
+        $filterParams = $query['filterParams'];
+        $column = $query['column'];
+        $ascending = $query['ascending'];
         $developers = Developer::filter($filterParams)
+            ->sort($column, $ascending)
         ->get(['first_name', 'last_name', 'rate', 'status', 'id']);
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
             'filterParams' => $filterParams,
+            'column' => $column,
+            'ascending' => $ascending == 'asc',
         ]);
     }
 

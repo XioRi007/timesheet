@@ -16,8 +16,8 @@ Object.keys(AllRules).forEach(rule => {
 
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/vue-fontawesome'
-import {faBackward, faForward, faPencil, faPlus, faTrashCan, faXmark} from '@fortawesome/free-solid-svg-icons'
-library.add(faBackward, faForward, faPencil, faTrashCan, faPlus, faXmark)
+import {faBackward, faForward, faPencil, faPlus, faTrashCan, faXmark, faSortUp, faSortDown} from '@fortawesome/free-solid-svg-icons'
+library.add(faBackward, faForward, faPencil, faTrashCan, faPlus, faXmark, faSortUp, faSortDown)
 
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'

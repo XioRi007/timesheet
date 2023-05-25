@@ -25,7 +25,7 @@ const props = defineProps({
   }
 })
 
-const form = useForm(props.filterParams)
+const form = useForm(Object.keys(props.filterParams).length ? props.filterParams : defaultParams)
 form.defaults(defaultParams)
 const submit = async () => {
   try {
@@ -42,13 +42,21 @@ const submit = async () => {
   }
 
 }
+const reset = () => {
+  form.reset()
+  router.get('', {
+    filter: form.data(),
+    column: null,
+    ascending: null
+  })
+}
 
 </script>
 
 <template>
   <form novalidate class="flex grid-rows-1 mb-6 items-end" @submit.prevent="submit">
 
-    <div class="w-96 mr-8">
+    <div class="w-1/4 mr-3">
       <InputLabel for="name" value="Name"/>
       <TextInput
         id="name"
@@ -59,7 +67,7 @@ const submit = async () => {
         type="text"
       />
     </div>
-    <div class="w-52 mr-8">
+    <div class="w-1/4 mr-3">
       <InputLabel for="rate" value="Rate"/>
       <TextInput
         id="rate"
@@ -71,7 +79,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="mr-12 w-48">
+    <div class="w-1/4">
       <InputLabel for="status" value="Status"/>
       <select
         id="status"
@@ -85,8 +93,10 @@ const submit = async () => {
       </select>
       <InputError :message="form.errors.status" class="mt-2"/>
     </div>
-    <PrimaryButton :disabled="form.processing" class="mr-2" type="submit">Filter</PrimaryButton>
-    <SecondaryButton :disabled="form.processing" @click="form.reset();submit()">Reset</SecondaryButton>
+    <div class="w-1/4 flex justify-end">
+      <PrimaryButton :disabled="form.processing" class="mr-8 h-10 w-24" type="submit">Filter</PrimaryButton>
+      <SecondaryButton :disabled="form.processing" class="h-10 w-24" @click="reset">Reset</SecondaryButton>
+    </div>
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error"/>
 

@@ -1,9 +1,10 @@
 <script setup>
 import {Link, router} from '@inertiajs/vue3'
-import {ref} from "vue"
+import {onMounted, ref} from "vue"
 import DeleteItemModal from "@/Components/DeleteItemModal.vue"
 import axios from "axios"
 import {showToast} from "@/useToast.js"
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome"
 
 const props = defineProps({
   data: {
@@ -32,9 +33,19 @@ const props = defineProps({
     type: String,
     required: true
   },
-
+  column: {
+    type: String
+  },
+  ascending: {
+    type: Boolean
+  },
+  _columnNames: {
+    type: Array,
+  }
 })
-const columnNames = props.data.length ? Object.keys(props.data[0]).filter(key => key !== 'id') : []
+const columns = props.data.length ? Object.keys(props.data[0]).filter(key => key !== 'id') : []
+const columnNames = props._columnNames ? props._columnNames : columns
+
 const deleteError = ref(null)
 const deletedItem = ref(null)
 const deleteItem = async (item) => {
@@ -44,28 +55,35 @@ const deleteItem = async (item) => {
     showToast(`${props.entityName.toProperCase()} was successfully deleted`)
     router.reload()
   } catch (err) {
-    console.log(err)
     showToast(err.response.data.message, 'error')
-    console.log(err.response.data.message)
     deleteError.value = err.response.data.message
   }
 }
 
-function formatColumnName(fieldName) {
+const formatColumnName = (fieldName) => {
   const words = fieldName.split('_')
   const formattedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
   return formattedWords.join(' ')
 }
-
+const sortByColumn = (column) => {
+  router.get('', {
+      column,
+      ascending: !props.ascending
+  })
+}
 </script>
 
 <template>
   <div v-if="data.length !== 0" class="border rounded-lg overflow-hidden dark:border-gray-700">
-    <table class="w-full text-sm text-left text-gray-300 rounded-lg">
+    <table class="w-full text-sm text-left text-gray-300 rounded-lg table-fixed	">
       <thead class="bg-gray-700 text-gray-300">
       <tr>
-        <th v-for="column in columnNames" class="px-6 py-4" scope="col">
-          {{ formatColumnName(column) }}
+        <th v-for="(column, index) in columns" class="px-6 py-4 cursor-pointer" scope="col" @click="sortByColumn(column)">
+          {{ formatColumnName(columnNames[index]) }}
+          <span class="" v-if="props.column === column">
+            <font-awesome-icon v-if="ascending" icon="fa-solid fa-sort-up" class="align-bottom"/>
+            <font-awesome-icon v-if="!ascending" icon="fa-solid fa-sort-down" class="align-text-top"/>
+          </span>
         </th>
         <th v-if="hasActions" class="px-6 py-4" scope="col">
           Actions
@@ -75,7 +93,7 @@ function formatColumnName(fieldName) {
       <tbody>
       <tr v-for="item in data" :key="item.id"
           class="border-b bg-gray-800 border-gray-700 hover:bg-gray-600">
-        <th v-for="column in columnNames" class="px-6 py-4 font-medium whitespace-nowrap text-white"
+        <th v-for="column in columns" class="px-6 py-4 font-medium whitespace-nowrap text-white"
             scope="row">
           {{
             column === 'status' ?

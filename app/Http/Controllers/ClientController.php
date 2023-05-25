@@ -17,16 +17,18 @@ class ClientController extends Controller
      */
     public function index(Request $request): Response
     {
-        if ($request->query->has('filter')) {
-            $filterParams = $request->query('filter');
-        } else {
-            $filterParams = [];
-        }
+        $query = $this->ParseQuery($request);
+        $filterParams = $query['filterParams'];
+        $column = $query['column'];
+        $ascending = $query['ascending'];
         $clients = Client::filter($filterParams)
+            ->sort($column, $ascending)
             ->get(['id', 'name', 'rate', 'status']);
         return Inertia::render('Client/Index', [
             'clients' => $clients,
             'filterParams' => $filterParams,
+            'column' => $column,
+            'ascending' => $ascending == 'asc',
         ]);
     }
 

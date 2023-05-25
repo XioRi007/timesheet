@@ -43,4 +43,22 @@ class BaseModel extends Model
             $query->where('last_name', 'LIKE' , '%' . $filterParams['last_name'] . '%');
         }
     }
+
+    public function scopesort($query, string $column, string $ascending)
+    {
+        if (str_contains($column, '.')) {
+            $arr = explode(".", $column);
+            $model = "App\Models\\" . ucfirst($arr[0]);
+            if($arr[1] == 'full_name'){
+                $arr[1] = 'CONCAT(first_name, " ", last_name) AS full_name';
+            }
+            $table = $this->getTable();
+            $query->orderBy($model::selectRaw($arr[1])->
+                whereColumn("id", rtrim($table) . '.' . $arr[0].'_id'),
+                $ascending
+            );
+        } else {
+            $query->orderBy($column, $ascending);
+        }
+    }
 }

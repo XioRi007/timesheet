@@ -27,7 +27,7 @@ const props = defineProps({
   }
 })
 
-const form = useForm(props.filterParams)
+const form = useForm(Object.keys(props.filterParams).length ? props.filterParams : defaultParams)
 form.defaults(defaultParams)
 const submit = async () => {
   try {
@@ -45,12 +45,20 @@ const submit = async () => {
 
 }
 
+const reset = () => {
+  form.reset()
+  router.get('', {
+    filter: form.data(),
+    column: null,
+    ascending: null
+  })
+}
 </script>
 
 <template>
   <form novalidate class="flex grid-rows-1 mb-6 items-end" @submit.prevent="submit">
 
-    <div class="w-64 mr-6">
+    <div class="w-1/5 mr-10">
       <InputLabel for="first_name" value="First Name"/>
       <TextInput
         id="first_name"
@@ -62,7 +70,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="w-56 mr-6">
+    <div class="w-1/5 mr-10">
       <InputLabel for="last_name" value="Last Name"/>
       <TextInput
         id="last_name"
@@ -73,7 +81,7 @@ const submit = async () => {
         type="text"
       />
     </div>
-    <div class="w-48 mr-6">
+    <div class="w-1/5 mr-10">
       <InputLabel for="rate" value="Rate"/>
       <TextInput
         id="rate"
@@ -85,7 +93,7 @@ const submit = async () => {
       />
     </div>
 
-    <div class="mr-6 w-44">
+    <div class="mr-10 w-1/5">
       <InputLabel for="status" value="Status"/>
       <select
         id="status"
@@ -99,8 +107,10 @@ const submit = async () => {
       </select>
       <InputError :message="form.errors.status" class="mt-2"/>
     </div>
-    <PrimaryButton :disabled="form.processing" class="mr-2" type="submit">Filter</PrimaryButton>
-    <SecondaryButton :disabled="form.processing" @click="form.reset();submit()">Reset</SecondaryButton>
+    <div class="w-1/5 flex justify-end">
+      <PrimaryButton :disabled="form.processing" class="mr-6 h-10 w-24" type="submit">Filter</PrimaryButton>
+      <SecondaryButton :disabled="form.processing" class="h-10 w-24" @click="reset">Reset</SecondaryButton>
+    </div>
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error"/>
 

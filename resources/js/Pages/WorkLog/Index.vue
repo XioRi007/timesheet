@@ -35,6 +35,9 @@ useToast();
               edit-action-link="worklogs.edit"
               entity-name="work log"
               redirect-link="worklogs.index"
+              :column="$page.props.column"
+              :ascending="$page.props.ascending"
+              :_column-names="['date', 'developer', 'project', 'rate', 'hours', 'total', 'status']"
             />
           </div>
         </div>

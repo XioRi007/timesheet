@@ -17,20 +17,20 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->query->has('filter')) {
-            $filterParams = $request->query('filter');
-        } else {
-            $filterParams = [];
-        }
+        $query = $this->ParseQuery($request);
+        $filterParams = $query['filterParams'];
+        $column = $query['column'];
+        $ascending = $query['ascending'];
         $clients = Client::all('id', 'name');
         $projects = Project::with('client:id,name')
             ->filter($filterParams)
+            ->sort($column, $ascending)
             ->get(['name', 'client_id', 'rate', 'status', 'id']);
 
         $transformedProjects = $projects->map(function ($project) {
             return [
                 'name' => $project->name,
-                'client' => $project->client->name,
+                'client.name' => $project->client->name,
                 'rate' => $project->rate,
                 'status' => $project->status,
                 'id' => $project->id,
@@ -39,6 +39,8 @@ class ProjectController extends Controller
         return Inertia::render('Project/Index', [
             'projects' => $transformedProjects,
             'filterParams' => $filterParams,
+            'column' => $column,
+            'ascending' => $ascending == 'asc',
             'clients' => $clients
         ]);
     }
