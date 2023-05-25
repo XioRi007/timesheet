@@ -3,12 +3,13 @@ import PrimaryButton from "@/Components/PrimaryButton.vue"
 import InputLabel from "@/Components/InputLabel.vue"
 import TextInput from "@/Components/TextInput.vue"
 import InputError from "@/Components/InputError.vue"
-import {Link, useForm} from "@inertiajs/vue3"
+import {useForm} from "@inertiajs/vue3"
 import Toggle from "@/Components/Toggle.vue"
 import SecondaryButton from "@/Components/SecondaryButton.vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {createToast, showToast} from "@/useToast.js"
+import CloseBtn from "@/CloseBtn.vue"
 
 
 const props = defineProps({
@@ -57,9 +58,7 @@ const submit = async () => {
 
 <template>
   <div class="bg-white overflow-hidden mb-6 flex justify-end">
-    <Link :href="route('clients.index')">
-      <font-awesome-icon class="" icon="fa-solid fa-xmark" size="xl" title="Close"/>
-    </Link>
+    <CloseBtn/>
   </div>
   <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
     <div>
