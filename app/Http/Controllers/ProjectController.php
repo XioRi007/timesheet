@@ -17,7 +17,11 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
-        $filterParams = $request->query();
+        if ($request->query->has('filter')) {
+            $filterParams = $request->query('filter');
+        } else {
+            $filterParams = [];
+        }
         $clients = Client::all('id', 'name');
         $projects = Project::with('client:id,name')
             ->filter($filterParams)

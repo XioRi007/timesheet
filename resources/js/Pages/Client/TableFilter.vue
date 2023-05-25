@@ -2,7 +2,7 @@
 import TextInput from "@/Components/TextInput.vue"
 import InputError from "@/Components/InputError.vue"
 import InputLabel from "@/Components/InputLabel.vue"
-import {useForm} from "@inertiajs/vue3"
+import {router, useForm} from "@inertiajs/vue3"
 import PrimaryButton from "@/Components/PrimaryButton.vue"
 import SecondaryButton from "@/Components/SecondaryButton.vue"
 import * as yup from "yup"
@@ -25,16 +25,14 @@ const props = defineProps({
   }
 })
 
-const form = useForm(Object.keys(props.filterParams).length ? props.filterParams : defaultParams)
+const form = useForm(props.filterParams)
 form.defaults(defaultParams)
 const submit = async () => {
   try {
     form.clearErrors()
     await schema.validate(form, {abortEarly: false})
-    form.get('', {
-      data: {
-        filter: JSON.stringify(form.data())
-      }
+    router.get('', {
+      filter: form.data()
     })
   } catch (err) {
     showToast('Fill the form correctly', 'error')

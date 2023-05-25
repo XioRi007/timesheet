@@ -15,7 +15,11 @@ class DeveloperController extends Controller
      */
     public function index(Request $request)
     {
-        $filterParams = $request->query();
+        if ($request->query->has('filter')) {
+            $filterParams = $request->query('filter');
+        } else {
+            $filterParams = [];
+        }
         $developers = Developer::filter($filterParams)
         ->get(['first_name', 'last_name', 'rate', 'status', 'id']);
         return Inertia::render('Developer/Index', [

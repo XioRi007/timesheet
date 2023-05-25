@@ -17,9 +17,13 @@ class ClientController extends Controller
      */
     public function index(Request $request): Response
     {
-        $filterParams = $request->query();
+        if ($request->query->has('filter')) {
+            $filterParams = $request->query('filter');
+        } else {
+            $filterParams = [];
+        }
         $clients = Client::filter($filterParams)
-        ->get(['id', 'name', 'rate', 'status']);
+            ->get(['id', 'name', 'rate', 'status']);
         return Inertia::render('Client/Index', [
             'clients' => $clients,
             'filterParams' => $filterParams,

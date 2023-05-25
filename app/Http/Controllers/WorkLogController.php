@@ -19,7 +19,11 @@ class WorkLogController extends Controller
      */
     public function index(Request $request)
     {
-        $filterParams = $request->query();
+        if ($request->query->has('filter')) {
+            $filterParams = $request->query('filter');
+        } else {
+            $filterParams = [];
+        }
         $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
         $projects = Project::all('id', 'name');
         $workLogs = WorkLog::with('developer:id,first_name,last_name')
