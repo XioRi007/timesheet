@@ -17,7 +17,10 @@ class ProjectController extends Controller
      */
     public function index(Request $request)
     {
+        $filterParams = $request->query();
+        $clients = Client::all('id', 'name');
         $projects = Project::with('client:id,name')
+            ->filter($filterParams)
             ->get(['name', 'client_id', 'rate', 'status', 'id']);
 
         $transformedProjects = $projects->map(function ($project) {
@@ -31,6 +34,8 @@ class ProjectController extends Controller
         });
         return Inertia::render('Project/Index', [
             'projects' => $transformedProjects,
+            'filterParams' => $filterParams,
+            'clients' => $clients
         ]);
     }
 

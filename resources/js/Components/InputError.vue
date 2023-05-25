@@ -14,7 +14,6 @@ const convertFirstWordToTitleCase = (str) => {
   if (words.length === 2 && words[1] !== 'id') {
     const second = words[1].charAt(0).toUpperCase() + words[1].slice(1)
     res += ' ' + second
-    console.log(second)
   }
   return res + str.slice(firstWords.length)
 }

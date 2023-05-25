@@ -15,9 +15,12 @@ class DeveloperController extends Controller
      */
     public function index(Request $request)
     {
-        $developers = Developer::all('first_name', 'last_name', 'rate', 'status', 'id');
+        $filterParams = $request->query();
+        $developers = Developer::filter($filterParams)
+        ->get(['first_name', 'last_name', 'rate', 'status', 'id']);
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
+            'filterParams' => $filterParams,
         ]);
     }
 

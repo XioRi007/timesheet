@@ -8,7 +8,6 @@ import * as yup from "yup"
 export const maxDecimalPlaces = (max) => {
   return yup
     .number()
-    .required()
     .test({
       name: 'decimal-places',
       params: {max},

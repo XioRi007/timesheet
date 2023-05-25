@@ -19,8 +19,12 @@ class WorkLogController extends Controller
      */
     public function index(Request $request)
     {
+        $filterParams = $request->query();
+        $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
+        $projects = Project::all('id', 'name');
         $workLogs = WorkLog::with('developer:id,first_name,last_name')
             ->with('project:id,name')
+            ->filter($filterParams)
             ->get(['created_at', 'project_id', 'developer_id', 'rate', 'status', 'hrs', 'total', 'id']);
         $transformedWorkLogs = $workLogs->map(function ($log) {
             return [
@@ -36,6 +40,9 @@ class WorkLogController extends Controller
         });
         return Inertia::render('WorkLog/Index', [
             'worklogs' => $transformedWorkLogs,
+            'developers' => $developers,
+            'projects' => $projects,
+            'filterParams'=>$filterParams
         ]);
     }
 

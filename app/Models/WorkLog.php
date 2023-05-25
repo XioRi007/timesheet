@@ -85,9 +85,10 @@ class WorkLog extends BaseModel
     /**
      * Checks if developer will work more than 24 hours/day
      * @param  $query
-     * @param string $developer_id
-     * @param float $hrs
-     * @param string $id
+     * @param  string  $developer_id
+     * @param  float  $hrs
+     * @param  string  $id
+     * @param  string  $created_at
      * @return  float
      * @throws  ValidationException
      */
@@ -112,7 +113,11 @@ class WorkLog extends BaseModel
 
 
     /**
-     *
+     * Sum of payed worklogs between dates
+     * @param  $query
+     * @param  \DateTimeInterface  $start
+     * @param  \DateTimeInterface  $end
+     * @return  mixed
      */
     public function scopeTotalPayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
     {
@@ -122,7 +127,11 @@ class WorkLog extends BaseModel
     }
 
     /**
-     *
+     * Sum of unpayed worklogs between dates
+     * @param  $query
+     * @param  \DateTimeInterface $start
+     * @param  \DateTimeInterface $end
+     * @return  mixed
      */
     public function scopeTotalUnpayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
     {

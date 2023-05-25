@@ -4,13 +4,10 @@ import {Head} from '@inertiajs/vue3'
 import DataTable from "@/Components/DataTable.vue"
 import Title from "@/Components/Title.vue"
 import {useToast} from "@/useToast.js"
+import AddLink from "@/Components/AddLink.vue"
+import TableFilter from "@/Pages/Client/TableFilter.vue"
 
-const props = defineProps({
-  message: {
-    type: String
-  }
-});
-useToast(props);
+useToast();
 </script>
 
 <template>
@@ -26,10 +23,13 @@ useToast(props);
         <div class="bg-white overflow-hidden p-10">
           <div
             class="relative overflow-x-auto">
+            <AddLink create-link="clients.create"/>
+            <TableFilter
+              :filter-params="$page.props.filterParams"
+            />
             <DataTable
               :data="$page.props.clients"
               :has-actions=true
-              create-link="clients.create"
               delete-action-link="clients.destroy"
               edit-action-link="clients.edit"
               entity-name="client"

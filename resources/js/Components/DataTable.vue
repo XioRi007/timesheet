@@ -3,7 +3,7 @@ import {Link, router} from '@inertiajs/vue3'
 import {ref} from "vue"
 import DeleteItemModal from "@/Components/DeleteItemModal.vue"
 import axios from "axios"
-import {createToast, showToast} from "@/useToast.js"
+import {showToast} from "@/useToast.js"
 
 const props = defineProps({
   data: {
@@ -13,9 +13,6 @@ const props = defineProps({
   hasActions: {
     type: Boolean,
     default: false
-  },
-  createLink: {
-    type: String,
   },
   editActionLink: {
     type: String,
@@ -63,11 +60,6 @@ function formatColumnName(fieldName) {
 </script>
 
 <template>
-  <div class="bg-white overflow-hidden mb-6 flex justify-end">
-    <Link :href="route(createLink)">
-      <font-awesome-icon class="" icon="fa-solid fa-plus" size="xl" title="Add new"/>
-    </Link>
-  </div>
   <div v-if="data.length !== 0" class="border rounded-lg overflow-hidden dark:border-gray-700">
     <table class="w-full text-sm text-left text-gray-300 rounded-lg">
       <thead class="bg-gray-700 text-gray-300">

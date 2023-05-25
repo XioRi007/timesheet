@@ -30,7 +30,7 @@ const props = defineProps({
 
 const schema = yup.object({
   name: yup.string().required(),
-  rate: maxDecimalPlaces(2).min(0).max(999.99).typeError('rate is required'),
+  rate: maxDecimalPlaces(2).required().min(0).max(999.99).typeError('rate is required'),
   status: yup.string().required().oneOf(['true', 'false']),
 })
 const form = useForm(props.client)

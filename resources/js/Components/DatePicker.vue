@@ -3,7 +3,7 @@ import {onMounted, ref} from 'vue'
 
 defineProps({
   modelValue: {
-    type: [String, Number],
+    type: [String, null],
     required: true,
   }
 })
@@ -26,7 +26,7 @@ defineExpose({focus: () => input.value.focus()})
     ref="input"
     :value="modelValue"
     class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
-    type="datetime-local"
+    type="date"
     @input="$emit('update:modelValue', $event.target.value)"
   />
 </template>
