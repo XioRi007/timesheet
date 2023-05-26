@@ -20,6 +20,7 @@ class Developer extends BaseModel
     protected $fillable = [
         'first_name',
         'last_name',
+        'user_id',
         'rate',
         'status'
     ];

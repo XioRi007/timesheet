@@ -2,8 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules;
 
 class StoreDeveloperRequest extends FormRequest
 {
@@ -25,6 +27,8 @@ class StoreDeveloperRequest extends FormRequest
         return [
             'first_name' => 'required|string',
             'last_name' => 'required|string',
+            'email' => 'required|string|email|max:255|unique:'.User::class,
+            'password' => ['required', Rules\Password::defaults()],
             'rate' => 'required|numeric|between:0,999.99',
         ];
     }

@@ -25,6 +25,7 @@ String.prototype.toProperCase = function () {
 import Echo from 'laravel-echo';
 
 import Pusher from 'pusher-js';
+import {showToast} from "@/useToast.js"
 window.Pusher = Pusher;
 
 window.Echo = new Echo({
@@ -37,3 +38,8 @@ window.Echo = new Echo({
     forceTLS: (import.meta.env.VITE_PUSHER_SCHEME ?? 'https') === 'https',
     enabledTransports: ['ws', 'wss'],
 });
+window.Echo
+  .private('timesheet')
+  .listen('.new-worklog', (e) => {
+    showToast(e.message, 'info', false)
+  })

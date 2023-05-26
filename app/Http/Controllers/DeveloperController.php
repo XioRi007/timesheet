@@ -6,9 +6,11 @@ use App\Http\Requests\StoreDeveloperRequest;
 use App\Http\Requests\UpdateDeveloperRequest;
 use App\Models\Developer;
 use App\Models\Project;
+use App\Models\User;
 use App\Models\WorkLog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -40,7 +42,14 @@ class DeveloperController extends Controller
      */
     public function store(StoreDeveloperRequest $request)
     {
-        Developer::create($request->validated());
+        $user = User::create([
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ]);
+        $user->assignRole('developer');
+        $data = $request->except(['password', 'email']);
+        $data['user_id'] = $user->id;
+        Developer::create($data);
         return to_route('developers.index');
     }
 

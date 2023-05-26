@@ -63,7 +63,6 @@ class WorkLog extends BaseModel
     {
         if ($developer_id) {
             $developer = Developer::find($developer_id);
-
             if ($developer->rate != '0.00') {
                 return floatval($developer->rate);
             }

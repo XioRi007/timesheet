@@ -33,7 +33,11 @@ class HandleInertiaRequests extends Middleware
         $user = null;
         if($request->user() != null){
             $user = $request->user()->load('roles:name');
+            if($user->hasRole('developer')){
+                $user->load('developer');
+            }
         }
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $user,

@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests;
 
+use App\Models\User;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Validation\Rules;
 
 class UpdateDeveloperRequest extends FormRequest
 {
@@ -26,7 +29,9 @@ class UpdateDeveloperRequest extends FormRequest
             'first_name' => 'string',
             'last_name' => 'string',
             'rate' => 'numeric|between:0,999.99',
-            'status' => 'boolean'
+            'status' => 'boolean',
+            ['email', 'max:255', Rule::unique(User::class)->ignore($this->user()->id)],
+            'password' => [Rules\Password::defaults()],
         ];
     }
 }

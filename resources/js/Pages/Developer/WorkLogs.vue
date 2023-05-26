@@ -7,6 +7,7 @@ import {useToast} from "@/useToast.js"
 import AddLink from "@/Components/AddLink.vue"
 import TableFilter from "@/Pages/WorkLog/TableFilter.vue"
 import Pagination from "@/Components/Pagination.vue"
+import UserName from "@/Components/UserName.vue"
 
 useToast();
 </script>
@@ -16,7 +17,7 @@ useToast();
 
   <AuthenticatedLayout>
     <template #header>
-      <Title :text="`${$page.props.auth.user.name} Work Logs`"/>
+      <Title text="Work Logs"/>
     </template>
 
     <div class="py-12">

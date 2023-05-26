@@ -62,7 +62,7 @@ class WorkLogController extends Controller
         WorkLog::create($request->validated());
         if($request->user()->hasRole('developer')){
             WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'));
-            return to_route('developers.worklogs', $request->user()->id);
+            return to_route('developers.worklogs', $request->user()->developer->id);
         }
         return to_route('worklogs.index');
     }
@@ -75,7 +75,7 @@ class WorkLogController extends Controller
         $res = $this->getDeveloperProjectRate($request);
         $user = $request->user();
         if($user->hasRole('developer')){
-            $developer = $user->id;
+            $developer = $user->developer->id;
             $developers = [];
         }else{
             $developer = $res['developer'];

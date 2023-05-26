@@ -22,6 +22,8 @@ const props = defineProps({
     default: {
       first_name: '',
       last_name: '',
+      email: '',
+      password: '',
       rate: 1.00,
       rate_percent: 1.00,
       status: true,
@@ -29,7 +31,15 @@ const props = defineProps({
   },
 })
 
-const schema = yup.object({
+const createSchema = yup.object({
+  first_name: yup.string().required(),
+  last_name: yup.string().required(),
+  email: yup.string().required().email(),
+  password: yup.string().required(),
+  rate: maxDecimalPlaces(2).required().min(0).max(999.99).typeError('rate is required'),
+  status: yup.string().required().oneOf(['true', 'false']),
+})
+const updateSchema = yup.object({
   first_name: yup.string().required(),
   last_name: yup.string().required(),
   rate: maxDecimalPlaces(2).required().min(0).max(999.99).typeError('rate is required'),
@@ -40,12 +50,20 @@ form.defaults()
 const submit = async () => {
   try {
     form.clearErrors()
-    await schema.validate(form, {abortEarly: false})
-    form.status = form.status === true
     if (route().current('developers.edit')) {
-      form.put(props.submitRoute)
+      await updateSchema.validate(form, {abortEarly: false})
+      form.status = form.status === true
+      form
+        .transform((data)=>{
+          delete data.password
+          delete data.email
+          return data
+        })
+        .put(props.submitRoute)
       createToast('Developer was successfully updated')
     } else {
+      await createSchema.validate(form, {abortEarly: false})
+      form.status = form.status === true
       form.post(props.submitRoute)
       createToast('Developer was successfully created')
     }
@@ -67,7 +85,7 @@ const submit = async () => {
     <div>
       <InputLabel for="name" value="First Name"/>
       <TextInput
-        id="name"
+        id="first_name"
         v-model="form.first_name"
         autocomplete="first_name"
         autofocus
@@ -80,14 +98,39 @@ const submit = async () => {
     <div>
       <InputLabel for="name" value="Last Name"/>
       <TextInput
-        id="name"
+        id="last_name"
         v-model="form.last_name"
         autocomplete="last_name"
-        autofocus
         class="mt-1 block w-full"
         type="text"
       />
       <InputError :message="form.errors.last_name" class="mt-2"/>
+    </div>
+
+    <div v-if="!route().current('developers.edit')">
+      <div>
+        <InputLabel for="email" value="Email"/>
+        <TextInput
+          id="email"
+          v-model="form.email"
+          autocomplete="email"
+          class="mt-1 block w-full"
+          type="text"
+        />
+        <InputError :message="form.errors.email" class="mt-2"/>
+      </div>
+
+      <div class="mt-6">
+        <InputLabel for="password" value="Password"/>
+        <TextInput
+          id="password"
+          v-model="form.password"
+          autocomplete="password"
+          class="mt-1 block w-full"
+          type="password"
+        />
+        <InputError :message="form.errors.password" class="mt-2"/>
+      </div>
     </div>
 
     <div>
