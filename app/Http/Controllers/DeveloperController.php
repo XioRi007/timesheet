@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreDeveloperRequest;
 use App\Http\Requests\UpdateDeveloperRequest;
 use App\Models\Developer;
+use App\Models\Project;
+use App\Models\WorkLog;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
@@ -51,9 +55,33 @@ class DeveloperController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Developer $developer)
+    public function worklogs(Request $request, Developer $developer)
     {
-        return $developer;
+        $query = $this->ParseQuery($request);
+        $filterParams = $query['filterParams'];
+        $column = $query['column'];
+        $ascending = $query['ascending'];
+        $projects = Project::all('id', 'name');
+        $workLogs = WorkLog::where('developer_id', $developer->id)
+            ->with('project:id,name')
+            ->filter($filterParams)
+            ->sort($column, $ascending)
+            ->paginate(50, ['created_at', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
+            ->withQueryString()
+            ->through(function ($log, $key) {
+                $log['project.name'] = $log->project->name;
+                $log['created_at'] = Carbon::parse($log->created_at)->toDateString();
+                unset($log['project_id']);
+                unset($log['project']);
+                return $log;
+            });
+        return Inertia::render('Developer/WorkLogs', [
+            'worklogs' => $workLogs,
+            'filterParams' => $filterParams,
+            'projects' => $projects,
+            'column' => $column,
+            'ascending' => $ascending == 'asc',
+        ]);
     }
 
     /**

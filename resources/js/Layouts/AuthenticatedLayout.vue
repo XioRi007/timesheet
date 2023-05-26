@@ -26,9 +26,8 @@ const showingNavigationDropdown = ref(false)
                   />
                 </Link>
               </div>
-
               <!-- Navigation Links -->
-              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')">
                 <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
                   Dashboard
                 </NavLink>
@@ -45,6 +44,13 @@ const showingNavigationDropdown = ref(false)
                   Work Logs
                 </NavLink>
               </div>
+
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user.roles.some(role => role.name === 'developer')">
+                <NavLink :href="route('developers.worklogs', $page.props.auth.user.id)" :active="route().current('developers.worklogs', $page.props.auth.user.id)">
+                  Work Logs
+                </NavLink>
+              </div>
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
@@ -122,6 +128,7 @@ const showingNavigationDropdown = ref(false)
         <div
           :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
           class="sm:hidden"
+          v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')"
         >
           <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
@@ -145,6 +152,35 @@ const showingNavigationDropdown = ref(false)
           </div>
           <div class="pt-2 pb-3 space-y-1">
             <ResponsiveNavLink :href="route('worklogs.index')" :active="route().current('worklogs.index')">
+              Work Logs
+            </ResponsiveNavLink>
+          </div>
+
+          <!-- Responsive Settings Options -->
+          <div class="pt-4 pb-1 border-t border-gray-200">
+            <div class="px-4">
+              <div class="font-medium text-base text-gray-800">
+                {{ $page.props.auth.user.name }}
+              </div>
+              <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
+            </div>
+
+            <div class="mt-3 space-y-1">
+              <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
+              <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+                Log Out
+              </ResponsiveNavLink>
+            </div>
+          </div>
+        </div>
+
+        <div
+          :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
+          class="sm:hidden"
+          v-if="$page.props.auth.user.roles.some(role => role.name === 'developer')"
+        >
+          <div class="pt-2 pb-3 space-y-1">
+            <ResponsiveNavLink :href="route('developers.worklogs', $page.props.auth.user.id)" :active="route().current('developers.worklogs', $page.props.auth.user.id)">
               Work Logs
             </ResponsiveNavLink>
           </div>

@@ -108,7 +108,7 @@ const changeUrl = (e) => {
     <CloseBtn/>
   </div>
   <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
-    <div>
+    <div v-if="$page.props.auth.user.roles.some(role => role.name !== 'developer')">
       <InputLabel for="developer" value="Developer"/>
       <select id="developer"
               v-model="form.developer_id"
@@ -132,19 +132,6 @@ const changeUrl = (e) => {
       <InputError :message="form.errors.project_id" class="mt-2"/>
     </div>
 
-    <div>
-      <InputLabel for="rate" value="Rate"/>
-      <TextInput
-        id="rate"
-        v-model="form.rate"
-        autocomplete="rate"
-        class="mt-1 block w-full"
-        step=".01"
-        type="number"
-        @input="updateTotal"
-      />
-      <InputError :message="form.errors.rate" class="mt-2"/>
-    </div>
 
     <div>
       <InputLabel for="rate" value="Hours"/>
@@ -159,27 +146,43 @@ const changeUrl = (e) => {
       />
       <InputError :message="form.errors.hrs" class="mt-2"/>
     </div>
+<div v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')">
+  <div>
+    <InputLabel for="rate" value="Rate"/>
+    <TextInput
+      id="rate"
+      v-model="form.rate"
+      autocomplete="rate"
+      class="mt-1 block w-full"
+      step=".01"
+      type="number"
+      @input="updateTotal"
+    />
+    <InputError :message="form.errors.rate" class="mt-2"/>
+  </div>
 
-    <div>
-      <InputLabel for="total" value="Total"/>
-      <TextInput
-        id="total"
-        v-model="form.total"
-        autocomplete="rate"
-        class="mt-1 block w-full"
-        step=".01"
-        type="number"
-      />
-      <InputError :message="form.errors.total" class="mt-2"/>
-    </div>
+  <div>
+    <InputLabel for="total" value="Total"/>
+    <TextInput
+      id="total"
+      v-model="form.total"
+      autocomplete="rate"
+      class="mt-1 block w-full"
+      step=".01"
+      type="number"
+    />
+    <InputError :message="form.errors.total" class="mt-2"/>
+  </div>
 
-    <div v-show="route().current('worklogs.edit')" class="flex justify-between ">
-      <Toggle
-        v-model="form.status"
-        active-text="Paid"
-        not-active-text="Unpaid"
-      />
-    </div>
+  <div v-show="route().current('worklogs.edit')" class="flex justify-between ">
+    <Toggle
+      v-model="form.status"
+      active-text="Paid"
+      not-active-text="Unpaid"
+    />
+  </div>
+</div>
+
 
     <div class="flex items-center gap-4 justify-between">
       <PrimaryButton :disabled="form.processing">Save</PrimaryButton>

@@ -2,10 +2,11 @@
 
 namespace Database\Factories;
 
+use App\Models\WorkLog;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\WorkLog>
+ * @extends Factory<WorkLog>
  */
 class WorkLogFactory extends Factory
 {
@@ -17,7 +18,7 @@ class WorkLogFactory extends Factory
     public function definition(): array
     {
         $rate = fake()->numberBetween(0, 999.99);
-        $hrs = fake()->numberBetween(1, 12);
+        $hrs = fake()->numberBetween(1, 4);
         return [
             'rate' => $rate,
             'hrs' => $hrs,

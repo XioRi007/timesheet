@@ -59,6 +59,9 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
+        if($request->user()->hasRole('developer')){
+            return to_route('developers.worklogs', $request->user()->id);
+        }
         return to_route('worklogs.index');
     }
 
@@ -68,10 +71,17 @@ class WorkLogController extends Controller
     public function create(Request $request)
     {
         $res = $this->getDeveloperProjectRate($request);
-        $developer = $res['developer'];
+        $user = $request->user();
+        if($user->hasRole('developer')){
+            $developer = $user->id;
+            $developers = [];
+        }else{
+            $developer = $res['developer'];
+            $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
+        }
+        $res = $this->getDeveloperProjectRate($request);
         $project = $res['project'];
         $rate = $res['rate'];
-        $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
         $projects = Project::all('id', 'name');
         return Inertia::render('WorkLog/Create', [
             'developers' => $developers,

@@ -4,12 +4,13 @@ namespace App\Models;
 
 use App\Models\Contracts\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Carbon;
+use Spatie\Permission\Traits\HasRoles;
 
 class Developer extends BaseModel
 {
-    use HasFactory;
+    use HasFactory, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -31,6 +32,14 @@ class Developer extends BaseModel
     protected $casts = [
         'status' => 'boolean',
     ];
+
+    /**
+     * Get the user.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * Get the work logs of the developer.

@@ -19,19 +19,30 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
-Route::middleware('auth')->group(function () {
-    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
-
-    Route::resource('clients', ClientController::class)->except('show');
-    Route::resource('projects', ProjectController::class)->except('show');
-    Route::resource('developers', DeveloperController::class)->except('show');
-    Route::resource('worklogs', WorkLogController::class)->except('show');
-
+Route::middleware('auth')->group((function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
+
+    Route::middleware('role:developer')->group(function () {
+        Route::get('/developers/{developer}/worklogs', [DeveloperController::class, 'worklogs'])->name('developers.worklogs');
+    });
+
+    Route::middleware('role:developer|admin')->group(function () {
+        Route::resource('worklogs', WorkLogController::class)->only('create', 'store');
+    });
+
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::resource('clients', ClientController::class)->except('show');
+        Route::resource('projects', ProjectController::class)->except('show');
+        Route::resource('developers', DeveloperController::class)->except('show');
+
+        Route::resource('worklogs', WorkLogController::class)->except('show','create', 'store');
+    });
+}));
+
 
 require __DIR__ . '/auth.php';
