@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\WorkLogCreatedByDeveloper;
 use App\Http\Requests\StoreWorkLogRequest;
 use App\Http\Requests\UpdateWorkLogRequest;
 use App\Models\Developer;
@@ -60,6 +61,7 @@ class WorkLogController extends Controller
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
         if($request->user()->hasRole('developer')){
+            WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'));
             return to_route('developers.worklogs', $request->user()->id);
         }
         return to_route('worklogs.index');

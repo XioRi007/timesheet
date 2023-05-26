@@ -37,8 +37,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->intended(RouteServiceProvider::HOME);
         }
         if (Auth::user()->hasRole('developer')) {
-//            dd(route('developers.show', Auth::user()->id));
-            return redirect()->intended(route('developers.show', Auth::user()->id));
+            return redirect()->intended(route('developers.worklogs', Auth::user()->id));
         }
         return redirect()->intended(RouteServiceProvider::HOME);
     }
