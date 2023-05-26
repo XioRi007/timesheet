@@ -32,7 +32,8 @@ class WorkLog extends BaseModel
      * @var array
      */
     protected $casts = [
-        'status' => 'boolean'
+        'status' => 'boolean',
+        'created_at' => 'datetime:Y-m-d',
     ];
 
 

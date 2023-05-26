@@ -6,6 +6,7 @@ import Title from "@/Components/Title.vue"
 import {useToast} from "@/useToast.js"
 import AddLink from "@/Components/AddLink.vue"
 import TableFilter from "@/Pages/WorkLog/TableFilter.vue"
+import Pagination from "@/Components/Pagination.vue"
 
 useToast();
 </script>
@@ -22,13 +23,13 @@ useToast();
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 text-center">
         <div class="bg-white overflow-hidden p-10">
           <div
-            class="relative overflow-x-auto">
+            class="relative">
             <AddLink create-link="worklogs.create"/>
             <TableFilter
               :filter-params="$page.props.filterParams"
             />
             <DataTable
-              :data="$page.props.worklogs"
+              :data="$page.props.worklogs.data"
               :has-actions=true
               :status-text="['Paid', 'Unpaid']"
               delete-action-link="worklogs.destroy"
@@ -38,6 +39,9 @@ useToast();
               :column="$page.props.column"
               :ascending="$page.props.ascending"
               :_column-names="['date', 'developer', 'project', 'rate', 'hours', 'total', 'status']"
+            />
+            <Pagination
+              :links="$page.props.worklogs.links"
             />
           </div>
         </div>

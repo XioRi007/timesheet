@@ -7,8 +7,8 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
 use Illuminate\Http\RedirectResponse;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class ProjectController extends Controller
 {
@@ -25,19 +25,16 @@ class ProjectController extends Controller
         $projects = Project::with('client:id,name')
             ->filter($filterParams)
             ->sort($column, $ascending)
-            ->get(['name', 'client_id', 'rate', 'status', 'id']);
-
-        $transformedProjects = $projects->map(function ($project) {
-            return [
-                'name' => $project->name,
-                'client.name' => $project->client->name,
-                'rate' => $project->rate,
-                'status' => $project->status,
-                'id' => $project->id,
-            ];
-        });
+            ->paginate(50, ['name', 'client_id as client.name', 'client_id', 'rate', 'status', 'id'])
+            ->withQueryString()
+            ->through(function ($project, $key) {
+                $project['client.name'] = $project->client->name;
+                unset($project['client_id']);
+                unset($project['client']);
+                return $project;
+            });;
         return Inertia::render('Project/Index', [
-            'projects' => $transformedProjects,
+            'projects' => $projects,
             'filterParams' => $filterParams,
             'column' => $column,
             'ascending' => $ascending == 'asc',

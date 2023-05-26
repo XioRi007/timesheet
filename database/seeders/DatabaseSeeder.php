@@ -17,18 +17,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $clients = Client::factory(5)->create();
+        $clients = Client::factory(60)->create();
         foreach ($clients as $client) {
-            Project::factory()->create([
+            Project::factory(2)->create([
                 'client_id' => $client->id
             ]);
         }
 
-        $developers = Developer::factory(10)->create();
+        $developers = Developer::factory(60)->create();
         foreach ($developers as $developer) {
-            WorkLog::factory()->create([
+            WorkLog::factory(3)->create([
                 'developer_id' => $developer->id,
-                'project_id' => rand(1, 5)
+                'project_id' => rand(1, 120)
             ]);
         }
         User::factory()->create([

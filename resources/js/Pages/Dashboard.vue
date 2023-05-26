@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import {Head} from '@inertiajs/vue3'
 import MonthTable from "@/Components/MonthTable.vue"
 import Title from "@/Components/Title.vue"
+import Pagination from "@/Components/Pagination.vue"
 </script>
 
 <template>
@@ -33,14 +34,18 @@ import Title from "@/Components/Title.vue"
           </div>
 
           <h2 class="mt-20 mb-10 text-xl font-semibold">Timesheet</h2>
+<!--          {{$page.props.table.data.data}}-->
           <MonthTable
-            :table="$page.props.table.data"
+            :table="$page.props.table.data.data"
             :month="$page.props.table.month"
             :year="$page.props.table.year"
             :daysInMonth="$page.props.table.daysInMonth"
             :currentMonth="$page.props.table.currentMonth"
             :prevMonth="$page.props.table.prevMonth"
             :nextMonth="$page.props.table.nextMonth"
+          />
+          <Pagination
+            :links="$page.props.table.data.links"
           />
         </div>
       </div>

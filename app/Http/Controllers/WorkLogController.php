@@ -11,13 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Inertia\Response;
 
 class WorkLogController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index(Request $request): Response
     {
         $query = $this->ParseQuery($request);
         $filterParams = $query['filterParams'];
@@ -29,21 +30,20 @@ class WorkLogController extends Controller
             ->with('project:id,name')
             ->filter($filterParams)
             ->sort($column, $ascending)
-            ->get(['created_at', 'project_id', 'developer_id', 'rate', 'status', 'hrs', 'total', 'id']);
-        $transformedWorkLogs = $workLogs->map(function ($log) {
-            return [
-                'created_at' => Carbon::parse($log->created_at)->toDateString(),
-                'developer.full_name' => $log->developer->full_name,
-                'project.name' => $log->project->name,
-                'rate' => $log->rate,
-                'hrs' => $log->hrs,
-                'total' => $log->total,
-                'status' => $log->status,
-                'id' => $log->id,
-            ];
-        });
+            ->paginate(50, ['created_at', 'developer_id as developer.full_name', 'developer_id', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
+            ->withQueryString()
+            ->through(function ($log, $key) {
+                $log['developer.full_name'] = $log->developer->full_name;
+                $log['project.name'] = $log->project->name;
+                $log['created_at'] = Carbon::parse($log->created_at)->toDateString();
+                unset($log['developer_id']);
+                unset($log['project_id']);
+                unset($log['project']);
+                unset($log['developer']);
+                return $log;
+            });
         return Inertia::render('WorkLog/Index', [
-            'worklogs' => $transformedWorkLogs,
+            'worklogs' => $workLogs,
             'developers' => $developers,
             'projects' => $projects,
             'filterParams' => $filterParams,

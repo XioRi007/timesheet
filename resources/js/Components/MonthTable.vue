@@ -45,7 +45,7 @@ defineProps({
       </Link>
     </div>
     <div
-      v-if="$page.props.table.data.length !== 0"
+      v-if="table.length !== 0"
       class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left text-gray-300">
         <thead class="text-xs uppercase bg-gray-700 text-gray-300">

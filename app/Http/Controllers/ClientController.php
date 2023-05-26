@@ -23,7 +23,8 @@ class ClientController extends Controller
         $ascending = $query['ascending'];
         $clients = Client::filter($filterParams)
             ->sort($column, $ascending)
-            ->get(['id', 'name', 'rate', 'status']);
+            ->paginate(50, ['id', 'name', 'rate', 'status'])
+            ->withQueryString();
         return Inertia::render('Client/Index', [
             'clients' => $clients,
             'filterParams' => $filterParams,
