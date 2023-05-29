@@ -31,6 +31,7 @@ class DeveloperController extends Controller
         $ascending = $query['ascending'];
         $developers = Developer::filter($filterParams)
             ->sort($column, $ascending)
+            ->orderBy('created_at', 'DESC')
             ->paginate(50, ['first_name', 'last_name', 'rate', 'status', 'id'])
             ->withQueryString();
 

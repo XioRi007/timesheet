@@ -27,6 +27,7 @@ class ProjectController extends Controller
         $ascending = $query['ascending'];
         $projects = Project::with('client:id,name')
             ->filter($filterParams)
+            ->orderBy('created_at', 'DESC')
             ->sort($column, $ascending)
             ->paginate(50, ['name', 'client_id as client.name', 'client_id', 'rate', 'status', 'id'])
             ->withQueryString()
