@@ -27,7 +27,7 @@ const props = defineProps({
       hrs: 0,
       total: 0,
       status: false,
-      date: Date()
+      date: new Date().toISOString().substring(0, 10)
     }
   },
   rate: {
