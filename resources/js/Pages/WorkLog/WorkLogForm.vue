@@ -105,6 +105,16 @@ const changeUrl = (e) => {
 
 <template>
   <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
+
+    <div>
+      <InputLabel for="date" value="Date"/>
+      <DatePicker
+        class="w-full"
+        v-model="form.date"
+      />
+      <InputError :message="form.errors.date" class="mt-2"/>
+    </div>
+
     <div v-if="$page.props.auth.user.roles.some(role => role.name !== 'developer')">
       <InputLabel for="developer" value="Developer"/>
       <select id="developer"
@@ -115,15 +125,6 @@ const changeUrl = (e) => {
         <option v-for="developer in $page.props.developers" :value="developer.id">{{ developer.name }}</option>
       </select>
       <InputError :message="form.errors.developer_id" class="mt-2"/>
-    </div>
-
-    <div>
-      <InputLabel for="date" value="Date"/>
-      <DatePicker
-        class="w-full"
-        v-model="form.date"
-      />
-      <InputError :message="form.errors.date" class="mt-2"/>
     </div>
 
     <div>
