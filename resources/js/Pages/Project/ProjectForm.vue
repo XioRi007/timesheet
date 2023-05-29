@@ -25,10 +25,6 @@ const props = defineProps({
       status: true,
     }
   },
-  backLink: {
-    type: String,
-    required: true
-  },
 })
 
 
@@ -53,7 +49,6 @@ const submit = async () => {
       form.post(props.submitRoute)
       createToast('Project was successfully created')
     }
-    router.visit(props.backLink);
   } catch (err) {
     showToast('Fill the form correctly', 'error')
     err.inner.forEach((element) => {

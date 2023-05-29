@@ -52,7 +52,7 @@ class ProjectController extends Controller
     public function store(StoreProjectRequest $request): RedirectResponse
     {
         Project::create($request->validated());
-        return back();
+        return redirect(route('projects.index'));
     }
 
     /**
@@ -94,7 +94,7 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $project->update($request->validated());
-        return back();
+        return redirect(route('projects.index'));
     }
 
     /**
