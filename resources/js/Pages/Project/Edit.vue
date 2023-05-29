@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3'
 import Title from "@/Components/Title.vue"
 import ProjectForm from "@/Pages/Project/ProjectForm.vue"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import ClientForm from "@/Pages/Client/ClientForm.vue"
 
 
 const props = defineProps({
@@ -30,6 +31,7 @@ const props = defineProps({
           <ProjectForm
             :project="project"
             :submitRoute="route('projects.update', project.id)"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

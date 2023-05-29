@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3'
 import Title from "@/Components/Title.vue"
 import DeveloperForm from "@/Pages/Developer/DeveloperForm.vue"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import ClientForm from "@/Pages/Client/ClientForm.vue"
 
 
 const props = defineProps({
@@ -31,6 +32,7 @@ const props = defineProps({
           <DeveloperForm
             :developer="developer"
             :submitRoute="route('developers.update', developer.id)"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

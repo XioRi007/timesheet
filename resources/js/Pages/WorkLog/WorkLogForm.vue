@@ -42,7 +42,11 @@ const props = defineProps({
   project: {
     type: Number,
     required: false
-  }
+  },
+  backLink: {
+    type: String,
+    required: true
+  },
 })
 const schema = yup.object({
   developer_id: yup.number().required(),
@@ -73,6 +77,7 @@ const submit = async () => {
       form.post(props.submitRoute)
       createToast('Work Log was successfully created')
     }
+    router.visit(props.backLink);
   } catch (err) {
     showToast('Fill the form correctly', 'error')
     err.inner.forEach((element) => {

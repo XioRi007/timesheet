@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3'
 import Title from "@/Components/Title.vue"
 import WorkLogForm from "@/Pages/WorkLog/WorkLogForm.vue"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import ClientForm from "@/Pages/Client/ClientForm.vue"
 </script>
 
 <template>
@@ -25,6 +26,7 @@ import CloseBtn from "@/Components/CloseBtn.vue"
             :project="$page.props.project"
             :rate="$page.props.rate"
             :submitRoute="route('worklogs.store')"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3'
 import Title from "@/Components/Title.vue"
 import WorkLogForm from "@/Pages/WorkLog/WorkLogForm.vue"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import ClientForm from "@/Pages/Client/ClientForm.vue"
 
 
 const props = defineProps({
@@ -33,6 +34,7 @@ const props = defineProps({
             :rate="$page.props.rate"
             :submitRoute="route('worklogs.update', worklog.id)"
             :worklog="worklog"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

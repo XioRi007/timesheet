@@ -3,7 +3,7 @@ import PrimaryButton from "@/Components/PrimaryButton.vue"
 import InputLabel from "@/Components/InputLabel.vue"
 import TextInput from "@/Components/TextInput.vue"
 import InputError from "@/Components/InputError.vue"
-import {useForm} from "@inertiajs/vue3"
+import {router, useForm} from "@inertiajs/vue3"
 import Toggle from "@/Components/Toggle.vue"
 import SecondaryButton from "@/Components/SecondaryButton.vue"
 import * as yup from "yup"
@@ -26,6 +26,10 @@ const props = defineProps({
       status: true
     }
   },
+  backLink: {
+    type: String,
+    required: true
+  },
 })
 
 
@@ -47,6 +51,7 @@ const submit = async () => {
       form.post(props.submitRoute)
       createToast('Client was successfully created')
     }
+    router.visit(props.backLink);
   } catch (err) {
     showToast('Fill the form correctly', 'error')
     err.inner.forEach((element) => {

@@ -23,6 +23,7 @@ import CloseBtn from "@/Components/CloseBtn.vue"
           </div>
           <ClientForm
             :submitRoute="route('clients.store')"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

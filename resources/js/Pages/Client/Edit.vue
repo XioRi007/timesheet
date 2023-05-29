@@ -31,6 +31,7 @@ const props = defineProps({
           <ClientForm
             :client="client"
             :submitRoute="route('clients.update', props.client.id)"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>

@@ -44,7 +44,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         Client::create($request->validated());
-        return to_route('clients.index');
+        return redirect($request->header('referer'));
     }
 
     /**
@@ -82,7 +82,8 @@ class ClientController extends Controller
     public function update(UpdateClientRequest $request, Client $client): RedirectResponse
     {
         $client->update($request->validated());
-        return to_route('clients.index');
+        return back();
+        return redirect($request->header('referer'));
     }
 
     /**

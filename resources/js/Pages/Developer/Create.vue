@@ -4,6 +4,7 @@ import {Head} from '@inertiajs/vue3'
 import Title from "@/Components/Title.vue"
 import DeveloperForm from "@/Pages/Developer/DeveloperForm.vue"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import ClientForm from "@/Pages/Client/ClientForm.vue"
 </script>
 
 <template>
@@ -22,6 +23,7 @@ import CloseBtn from "@/Components/CloseBtn.vue"
           </div>
           <DeveloperForm
             :submitRoute="route('developers.store')"
+            :back-link="$page.props.backLink"
           />
         </div>
       </div>
