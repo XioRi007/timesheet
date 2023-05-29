@@ -50,9 +50,11 @@ class ClientController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create(): Response
+    public function create(Request $request): Response
     {
-        return Inertia::render('Client/Create');
+        return Inertia::render('Client/Create', [
+            'backLink'=>$request->header('referer')
+        ]);
     }
 
     /**
@@ -66,10 +68,11 @@ class ClientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Client $client): Response
+    public function edit(Request $request, Client $client): Response
     {
         return Inertia::render('Client/Edit', [
-            'client' => $client
+            'client' => $client,
+            'backLink'=>$request->header('referer')
         ]);
     }
 

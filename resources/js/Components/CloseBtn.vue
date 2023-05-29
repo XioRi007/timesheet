@@ -7,7 +7,15 @@
 </template>
 
 <script setup>
+import {router} from "@inertiajs/vue3"
+const props = defineProps({
+  link: {
+    type: String,
+    required: true
+  }
+})
+
 const back = () => {
-  window.history.back();
+  router.visit(props.link)
 }
 </script>

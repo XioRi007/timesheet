@@ -60,9 +60,11 @@ class DeveloperController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
-        return Inertia::render('Developer/Create');
+        return Inertia::render('Developer/Create', [
+            'backLink'=>$request->header('referer')
+        ]);
     }
 
     /**
@@ -100,10 +102,11 @@ class DeveloperController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Developer $developer)
+    public function edit(Request $request, Developer $developer)
     {
         return Inertia::render('Developer/Edit', [
-            'developer' => $developer
+            'developer' => $developer,
+            'backLink'=>$request->header('referer')
         ]);
     }
 

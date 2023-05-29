@@ -58,11 +58,12 @@ class ProjectController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $clients = Client::all('id', 'name');
         return Inertia::render('Project/Create', [
-            'clients' => $clients
+            'clients' => $clients,
+            'backLink'=>$request->header('referer')
         ]);
     }
 
@@ -77,12 +78,13 @@ class ProjectController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Project $project)
+    public function edit(Request $request, Project $project)
     {
         $clients = Client::all('id', 'name');
         return Inertia::render('Project/Edit', [
             'project' => $project,
-            'clients' => $clients
+            'clients' => $clients,
+            'backLink'=>$request->header('referer')
         ]);
     }
 

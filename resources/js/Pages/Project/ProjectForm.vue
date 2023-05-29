@@ -9,7 +9,7 @@ import Toggle from "@/Components/Toggle.vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {createToast, showToast} from "@/useToast.js"
-import CloseBtn from "@/CloseBtn.vue"
+import CloseBtn from "@/Components/CloseBtn.vue"
 
 const props = defineProps({
   submitRoute: {
@@ -60,9 +60,6 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="bg-white overflow-hidden mb-6 flex justify-end">
-    <CloseBtn/>
-  </div>
   <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
 
     <div>

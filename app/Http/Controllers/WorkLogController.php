@@ -11,6 +11,7 @@ use App\Models\WorkLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -53,7 +54,7 @@ class WorkLogController extends Controller
             'projects' => $projects,
             'filterParams' => $filterParams,
             'column' => $column,
-            'ascending' => $ascending == 'asc',
+            'ascending' => $ascending == 'asc'
         ]);
     }
 
@@ -95,6 +96,7 @@ class WorkLogController extends Controller
             'rate' => $rate,
             'developer' => $developer,
             'project' => $project,
+            'backLink'=>$request->header('referer')
         ]);
     }
 
@@ -124,6 +126,7 @@ class WorkLogController extends Controller
             'rate' => $rate,
             'developer' => $developer,
             'project' => $project,
+            'backLink'=>$request->header('referer')
         ]);
     }
 
