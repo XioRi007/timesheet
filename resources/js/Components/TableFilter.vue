@@ -9,6 +9,7 @@ import {showToast} from "@/useToast.js"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import DatePicker from "@/Components/DatePicker.vue"
+import {computed} from "vue"
 
 const props = defineProps({
   filterParams: {
@@ -83,13 +84,19 @@ const reset = () => {
     ascending: null
   })
 }
+const computedStyles = computed(()=>{
+  const gridColumnCount = props.filterFormat.length + 1;
+  return {
+    'grid-template-columns': `repeat(${gridColumnCount}, minmax(0, 1fr))`
+  };
+})
 </script>
 
 <template>
   <form
     novalidate
     class="flex mb-6 items-end grid"
-    :class="`grid-cols-${filterFormat.length+1}`"
+    :style="computedStyles"
     @submit.prevent="submit">
     <div v-for="column in filterFormat" class="col-span-1 pr-3 font-medium text-black">
       <InputLabel :for="column.real" :value="column.name"/>
@@ -146,3 +153,8 @@ const reset = () => {
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error"/>
 </template>
+<style>
+.grid-cols-custom {
+    grid-template-columns: repeat(props.filterFormat.length +1, minmax(0, 1fr));
+}
+</style>
