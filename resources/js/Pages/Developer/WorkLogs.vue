@@ -5,9 +5,7 @@ import DataTable from "@/Components/DataTable.vue"
 import Title from "@/Components/Title.vue"
 import {useToast} from "@/useToast.js"
 import AddLink from "@/Components/AddLink.vue"
-import TableFilter from "@/Pages/WorkLog/TableFilter.vue"
 import Pagination from "@/Components/Pagination.vue"
-import UserName from "@/Components/UserName.vue"
 
 useToast();
 </script>
@@ -26,9 +24,6 @@ useToast();
           <div
             class="relative">
             <AddLink create-link="worklogs.create"/>
-<!--            <TableFilter-->
-<!--              :filter-params="$page.props.filterParams"-->
-<!--            />-->
             <DataTable
               :data="$page.props.worklogs.data"
               :has-actions=false
@@ -39,7 +34,34 @@ useToast();
               redirect-link="worklogs.index"
               :column="$page.props.column"
               :ascending="$page.props.ascending"
-              :_column-names="['date', 'project', 'rate', 'hours', 'total', 'status']"
+              :filter-params="$page.props.filterParams"
+              :filterFormat="[{
+                  name: 'Date',
+                  real: 'created_at',
+                  type: 'date'
+                },{
+                  name: 'Project',
+                  real: 'project_id',
+                  type: 'select',
+                  data: $page.props.projects
+                },{
+                  name: 'Rate',
+                  real: 'rate',
+                  type: 'rate'
+                },{
+                  name: 'Hours',
+                  real: 'hrs',
+                  type: 'hrs'
+                },{
+                  name: 'Total',
+                  real: 'total',
+                  type: 'total'
+                },{
+                  name: 'Status',
+                  real: 'status',
+                  type: 'status'
+                }
+               ]"
             />
             <Pagination
               :links="$page.props.worklogs.links"

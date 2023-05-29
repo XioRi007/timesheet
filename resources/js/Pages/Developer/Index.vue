@@ -4,7 +4,6 @@ import {Head} from '@inertiajs/vue3'
 import DataTable from "@/Components/DataTable.vue"
 import Title from "@/Components/Title.vue"
 import {useToast} from "@/useToast.js"
-import TableFilter from "@/Pages/Developer/TableFilter.vue"
 import AddLink from "@/Components/AddLink.vue"
 import Pagination from "@/Components/Pagination.vue"
 
@@ -25,9 +24,6 @@ useToast();
           <div
             class="relative">
             <AddLink create-link="developers.create"/>
-            <TableFilter
-              :filter-params="$page.props.filterParams"
-            />
             <DataTable
               :data="$page.props.developers.data"
               :has-actions=true
@@ -37,6 +33,25 @@ useToast();
               redirect-link="developers.index"
               :column="$page.props.column"
               :ascending="$page.props.ascending"
+              :filter-params="$page.props.filterParams"
+              :filterFormat="[{
+                  name: 'First Name',
+                  real: 'first_name',
+                  type: 'text'
+                }, {
+                  name: 'Last Name',
+                  real: 'last_name',
+                  type: 'text'
+                },{
+                  name: 'Rate',
+                  real: 'rate',
+                  type: 'rate'
+                },{
+                  name: 'Status',
+                  real: 'status',
+                  type: 'status'
+                }
+               ]"
             />
             <Pagination
               :links="$page.props.developers.links"

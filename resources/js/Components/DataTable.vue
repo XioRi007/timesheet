@@ -1,10 +1,14 @@
 <script setup>
-import {Link, router} from '@inertiajs/vue3'
+import {Link, router, useForm} from '@inertiajs/vue3'
 import {onMounted, ref} from "vue"
 import DeleteItemModal from "@/Components/DeleteItemModal.vue"
 import axios from "axios"
 import {showToast} from "@/useToast.js"
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome"
+import TableFilter from "@/Components/TableFilter.vue"
+import TextInput from "@/Components/TextInput.vue"
+import SecondaryButton from "@/Components/SecondaryButton.vue"
+import PrimaryButton from "@/Components/PrimaryButton.vue"
 
 const props = defineProps({
   data: {
@@ -39,12 +43,16 @@ const props = defineProps({
   ascending: {
     type: Boolean
   },
-  _columnNames: {
+  filterFormat: {
     type: Array,
+    required: true
+  },
+  filterParams: {
+    type: [Array, Object],
   }
 })
 const columns = props.data.length ? Object.keys(props.data[0]).filter(key => key !== 'id') : []
-const columnNames = props._columnNames ? props._columnNames : columns
+const columnNames = props.filterFormat.map((e)=>e.name)
 
 const deleteError = ref(null)
 const deletedItem = ref(null)
@@ -74,6 +82,11 @@ const sortByColumn = (column) => {
 </script>
 
 <template>
+  <TableFilter
+    :filter-params="filterParams"
+    :status-text="statusText"
+    :filter-format="filterFormat"
+  />
   <div v-if="data.length !== 0" class="border rounded-lg overflow-hidden dark:border-gray-700">
     <table class="w-full text-sm text-left text-gray-300 rounded-lg table-fixed	">
       <thead class="bg-gray-700 text-gray-300">

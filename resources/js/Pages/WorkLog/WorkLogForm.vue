@@ -161,7 +161,7 @@ const changeUrl = (e) => {
     <InputError :message="form.errors.rate" class="mt-2"/>
   </div>
 
-  <div>
+  <div class="mt-6">
     <InputLabel for="total" value="Total"/>
     <TextInput
       id="total"
@@ -174,7 +174,7 @@ const changeUrl = (e) => {
     <InputError :message="form.errors.total" class="mt-2"/>
   </div>
 
-  <div v-show="route().current('worklogs.edit')" class="flex justify-between ">
+  <div v-show="route().current('worklogs.edit')" class="flex justify-between mt-6">
     <Toggle
       v-model="form.status"
       active-text="Paid"
