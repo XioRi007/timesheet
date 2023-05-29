@@ -44,7 +44,7 @@ class ClientController extends Controller
     public function store(StoreClientRequest $request): RedirectResponse
     {
         Client::create($request->validated());
-        return redirect($request->header('referer'));
+        return back();
     }
 
     /**
@@ -83,7 +83,6 @@ class ClientController extends Controller
     {
         $client->update($request->validated());
         return back();
-        return redirect($request->header('referer'));
     }
 
     /**

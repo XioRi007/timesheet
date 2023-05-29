@@ -54,7 +54,7 @@ class DeveloperController extends Controller
         $data = $request->except(['password', 'email']);
         $data['user_id'] = $user->id;
         Developer::create($data);
-        return to_route('developers.index');
+        return back();
     }
 
     /**
@@ -116,7 +116,7 @@ class DeveloperController extends Controller
     public function update(UpdateDeveloperRequest $request, Developer $developer)
     {
         $developer->update($request->validated());
-        return to_route('developers.index');
+        return back();
     }
 
     /**
