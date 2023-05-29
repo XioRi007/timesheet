@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $adminRole = Role::create(['name' => 'admin']);
-        $developerRole = Role::create(['name' => 'developer']);
+        Role::create(['name' => 'developer']);
 
         $clients = Client::factory(60)->create();
         foreach ($clients as $client) {
@@ -28,25 +28,14 @@ class DatabaseSeeder extends Seeder
                 'client_id' => $client->id
             ]);
         }
-        foreach (range(1, 60) as $number) {
-            $first_name = fake()->firstName;
-            $last_name = fake()->lastName;
-            $user = User::factory()->create([
-                'name'=>$first_name . ' '. $last_name
-            ]);
-            $user->assignRole($developerRole);
-            $developer = Developer::factory()->create([
-                'user_id'=>$user->id,
-                'first_name'=>$first_name,
-                'last_name'=>$last_name,
-            ]);
+        $developers = Developer::factory(60)->create();
+        foreach ($developers as $developer) {
             WorkLog::factory(3)->create([
                 'developer_id' => $developer->id,
                 'project_id' => rand(1, 120)
             ]);
         }
         $admin = User::factory()->create([
-            'name' => 'admin',
             'email' => 'admin@email.com'
         ]);
         $admin->assignRole($adminRole);

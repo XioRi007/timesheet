@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
- use Illuminate\Support\Facades\Gate;
+ use App\Models\Client;use App\Models\Developer;use App\Models\Project;use App\Models\WorkLog;use App\Policies\ClientPolicy;use App\Policies\DeveloperPolicy;use App\Policies\ProjectPolicy;use App\Policies\WorkLogPolicy;use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -13,7 +13,10 @@ class AuthServiceProvider extends ServiceProvider
      * @var array<class-string, class-string>
      */
     protected $policies = [
-        //
+        Client::class => ClientPolicy::class,
+        Project::class => ProjectPolicy::class,
+        Developer::class => DeveloperPolicy::class,
+        WorkLog::class => WorkLogPolicy::class,
     ];
 
     /**
@@ -22,8 +25,8 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerPolicies();
-
-        // Implicitly grant "admin" role all permissions
+//
+//        // Implicitly grant "admin" role all permissions
         Gate::before(function ($user, $ability) {
             return $user->hasRole('admin') ? true : null;
         });

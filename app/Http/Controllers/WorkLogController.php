@@ -16,6 +16,10 @@ use Inertia\Response;
 
 class WorkLogController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(WorkLog::class, 'workLog');
+    }
     /**
      * Display a listing of the resource.
      */

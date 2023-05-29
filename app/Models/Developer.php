@@ -6,11 +6,10 @@ use App\Models\Contracts\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Spatie\Permission\Traits\HasRoles;
 
 class Developer extends BaseModel
 {
-    use HasFactory, HasRoles;
+    use HasFactory;
 
     /**
      * The attributes that are mass assignable.

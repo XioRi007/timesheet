@@ -8,14 +8,18 @@ use App\Models\Developer;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\WorkLog;
+use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 
 class DeveloperController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Developer::class, 'developer');
+    }
+
     /**
      * Display a listing of the resource.
      */

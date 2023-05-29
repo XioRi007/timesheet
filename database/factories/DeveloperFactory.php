@@ -2,10 +2,12 @@
 
 namespace Database\Factories;
 
+use App\Models\Developer;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Developer>
+ * @extends Factory<Developer>
  */
 class DeveloperFactory extends Factory
 {
@@ -16,10 +18,13 @@ class DeveloperFactory extends Factory
      */
     public function definition(): array
     {
+        $user = User::factory()->create();
+        $user->assignRole('developer');
         return [
-            'first_name'=>fake()->firstName(),
-            'last_name'=>fake()->lastName(),
-            'rate'=>fake()->numberBetween(0, 999.99),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
+            'rate' => fake()->numberBetween(0, 999.99),
+            'user_id' => $user->id
         ];
     }
 }

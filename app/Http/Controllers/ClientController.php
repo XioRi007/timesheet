@@ -12,6 +12,11 @@ use Inertia\Response;
 
 class ClientController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Client::class, 'client');
+    }
+
     /**
      * Display a listing of the resource.
      */
