@@ -28,13 +28,25 @@ class ClientController extends Controller
         $ascending = $query['ascending'];
         $clients = Client::filter($filterParams)
             ->sort($column, $ascending)
+            ->orderBy('created_at', 'DESC')
             ->paginate(50, ['id', 'name', 'rate', 'status'])
             ->withQueryString();
+
+        $client = new Client();
+        $columns = $client->getConnection()->getSchemaBuilder()->getColumnListing($client->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = Client::distinct()->orderBy($column)->pluck($column)->toArray();
+        }
+
         return Inertia::render('Client/Index', [
             'clients' => $clients,
             'filterParams' => $filterParams,
             'column' => $column,
             'ascending' => $ascending == 'asc',
+            'filterData' => $filterData,
         ]);
     }
 

@@ -6,11 +6,10 @@ import InputError from "@/Components/InputError.vue"
 import {router, useForm} from "@inertiajs/vue3"
 import SecondaryButton from "@/Components/SecondaryButton.vue"
 import Toggle from "@/Components/Toggle.vue"
-import {computed, onMounted} from "vue"
+import {onMounted} from "vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {createToast, showToast} from "@/useToast.js"
-import CloseBtn from "@/Components/CloseBtn.vue"
 import DatePicker from "@/Components/DatePicker.vue"
 
 const props = defineProps({
@@ -117,7 +116,6 @@ const changeUrl = (e) => {
       </select>
       <InputError :message="form.errors.developer_id" class="mt-2"/>
     </div>
-
 
     <div>
       <InputLabel for="date" value="Date"/>

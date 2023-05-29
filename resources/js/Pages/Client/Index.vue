@@ -38,11 +38,13 @@ useToast();
               :filterFormat="[{
                   name: 'Name',
                   real: 'name',
-                  type: 'text'
+                  type: 'select',
+                  data: $page.props.filterData.name
                 },{
                   name: 'Rate',
                   real: 'rate',
-                  type: 'rate'
+                  type: 'select',
+                  data: $page.props.filterData.rate
                 },{
                   name: 'Status',
                   real: 'status',

@@ -38,29 +38,33 @@ useToast();
               :filterFormat="[{
                   name: 'Date',
                   real: 'date',
-                  type: 'date'
+                  type: 'select',
+                  data: $page.props.filterData.date
                 }, {
                   name: 'Developer',
                   real: 'developer_id',
-                  type: 'select',
-                  data: $page.props.developers
+                  type: 'select_model',
+                  data: $page.props.filterData.developers
                 },{
                   name: 'Project',
                   real: 'project_id',
-                  type: 'select',
-                  data: $page.props.projects
+                  type: 'select_model',
+                  data: $page.props.filterData.projects
                 },{
                   name: 'Rate',
                   real: 'rate',
-                  type: 'rate'
+                  type: 'select',
+                  data: $page.props.filterData.rate
                 },{
                   name: 'Hours',
                   real: 'hrs',
-                  type: 'hrs'
+                  type: 'select',
+                  data: $page.props.filterData.hrs
                 },{
                   name: 'Total',
                   real: 'total',
-                  type: 'total'
+                  type: 'select',
+                  data: $page.props.filterData.total
                 },{
                   name: 'Status',
                   real: 'status',

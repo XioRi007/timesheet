@@ -25,7 +25,6 @@ class ProjectController extends Controller
         $filterParams = $query['filterParams'];
         $column = $query['column'];
         $ascending = $query['ascending'];
-        $clients = Client::all('id', 'name');
         $projects = Project::with('client:id,name')
             ->filter($filterParams)
             ->sort($column, $ascending)
@@ -36,13 +35,25 @@ class ProjectController extends Controller
                 unset($project['client_id']);
                 unset($project['client']);
                 return $project;
-            });;
+            });
+
+        $project = new Project();
+        $columns = $project->getConnection()->getSchemaBuilder()->getColumnListing($project->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = Project::distinct()->orderBy($column)->pluck($column)->toArray();
+        }
+        $clients = Client::whereIn('id', $filterData['client_id'])->orderBy('name')->get(['name', 'id']);
+        unset($filterData['client_id']);
+        $filterData['clients'] = $clients;
+
         return Inertia::render('Project/Index', [
             'projects' => $projects,
             'filterParams' => $filterParams,
             'column' => $column,
             'ascending' => $ascending == 'asc',
-            'clients' => $clients
+            'filterData' => $filterData,
         ]);
     }
 

@@ -33,11 +33,22 @@ class DeveloperController extends Controller
             ->sort($column, $ascending)
             ->paginate(50, ['first_name', 'last_name', 'rate', 'status', 'id'])
             ->withQueryString();
+
+        $developer = new Developer();
+        $columns = $developer->getConnection()->getSchemaBuilder()->getColumnListing($developer->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = Developer::distinct()->orderBy($column)->pluck($column)->toArray();
+        }
+
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
             'filterParams' => $filterParams,
             'column' => $column,
             'ascending' => $ascending == 'asc',
+            'filterData' => $filterData,
         ]);
     }
 

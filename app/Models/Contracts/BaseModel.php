@@ -9,8 +9,6 @@ class BaseModel extends Model
     protected static function boot()
     {
         parent::boot();
-
-        static::addGlobalScope(new OrderByCreatedAtScope);
     }
 
 

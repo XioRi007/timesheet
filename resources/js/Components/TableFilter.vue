@@ -6,8 +6,6 @@ import PrimaryButton from "@/Components/PrimaryButton.vue"
 import InputError from "@/Components/InputError.vue"
 import {router, useForm} from "@inertiajs/vue3"
 import {showToast} from "@/useToast.js"
-import * as yup from "yup"
-import {maxDecimalPlaces} from "@/validation.js"
 import DatePicker from "@/Components/DatePicker.vue"
 import {computed} from "vue"
 
@@ -32,37 +30,10 @@ props.filterFormat.forEach((column) => {
 const form = useForm(Object.keys(props.filterParams).length ? props.filterParams : defaultParams)
 form.defaults(defaultParams)
 
-let schemaFields = {}
-props.filterFormat.forEach(column => {
-  switch (column.type) {
-    case 'text':
-      schemaFields[column.real] = yup.string().nullable()
-      break
-    case 'rate':
-      schemaFields[column.real] = maxDecimalPlaces(2).min(0).max(999.99).nullable()
-      break
-    case 'status':
-      schemaFields[column.real] = yup.boolean().nullable()
-      break
-    case 'select':
-      schemaFields[column.real] = yup.number().nullable()
-      break
-    case 'hrs':
-      schemaFields[column.real] = maxDecimalPlaces(2).min(0.1).max(999.99).nullable()
-      break
-    case 'total':
-      schemaFields[column.real] = maxDecimalPlaces(2).min(0).max(99999999.99).nullable()
-      break
-    default:
-      break
-  }
-})
-const schema = yup.object(schemaFields)
 
 const submit = async () => {
   try {
     form.clearErrors()
-    await schema.validate(form, {abortEarly: false})
     router.get('', {
       filter: form.data()
     })
@@ -122,12 +93,23 @@ const computedStyles = computed(()=>{
 
       <select
         :id="column.real"
-        v-else-if="column.type === 'select'"
+        v-else-if="column.type === 'select_model'"
         v-model="form[column.real]"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
       >
         <option :value=null selected></option>
         <option v-for="item in column.data" :value="item.id">{{ item.name }}</option>
+      </select>
+
+
+      <select
+        :id="column.real"
+        v-else-if="column.type === 'select'"
+        v-model="form[column.real]"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+      >
+        <option :value=null selected></option>
+        <option v-for="item in column.data" :value="item">{{ item }}</option>
       </select>
 
       <DatePicker
