@@ -84,7 +84,7 @@ class WorkLogController extends Controller
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
         if($request->user()->hasRole('developer')){
-            WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'));
+            WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'), $request->validated('date'));
             return to_route('developers.worklogs', $request->user()->developer->id);
         }
         return redirect(route('worklogs.index'));
@@ -154,7 +154,7 @@ class WorkLogController extends Controller
     public function update(UpdateWorkLogRequest $request, WorkLog $worklog)
     {
 //        dd($request->validated());
-        WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id, $worklog->created_at);
+        WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->date, $worklog->id);
         $worklog->update($request->validated());
         return redirect(route('worklogs.index'));
     }

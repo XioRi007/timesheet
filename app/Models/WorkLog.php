@@ -94,7 +94,7 @@ class WorkLog extends BaseModel
      * @return  float
      * @throws  ValidationException
      */
-    public function scopeCheckMaxHoursToday($query, string $developer_id, float $hrs, string $id = '', string $created_at = ''): float
+    public function scopeCheckMaxHoursToday($query, string $developer_id, float $hrs, string $created_at = '', string $id = ''): float
     {
         if ($created_at == '') {
             $currentDate = Carbon::now()->format('Y-m-d');
@@ -103,7 +103,7 @@ class WorkLog extends BaseModel
         }
 
         $totalHours = $query->where('developer_id', $developer_id)
-            ->whereDate('created_at', $currentDate)
+            ->whereDate('date', $currentDate)
             ->where('id', '<>', $id)
             ->sum('hrs');
 
@@ -124,7 +124,7 @@ class WorkLog extends BaseModel
     public function scopeTotalPayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
     {
         return $query->where('status', true)
-            ->whereBetween('created_at', [$start, $end])
+            ->whereBetween('date', [$start, $end])
             ->sum('total');
     }
 
@@ -138,7 +138,7 @@ class WorkLog extends BaseModel
     public function scopeTotalUnpayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
     {
         return $query->where('status', false)
-            ->whereBetween('created_at', [$start, $end])
+            ->whereBetween('date', [$start, $end])
             ->sum('total');
     }
 }

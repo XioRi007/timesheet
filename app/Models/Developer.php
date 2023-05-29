@@ -67,9 +67,9 @@ class Developer extends BaseModel
     {
         $developers = Developer::where('status', true)
             ->select('id', 'first_name', 'last_name')
-            ->with('workLogs:hrs,created_at,id,developer_id')
+            ->with('workLogs:hrs,date,id,developer_id')
             ->whereHas('workLogs', function ($query) use ($startOfMonth, $endOfMonth) {
-                return $query->whereBetween('created_at', [$startOfMonth, $endOfMonth]);
+                return $query->whereBetween('date', [$startOfMonth, $endOfMonth]);
             })
             ->paginate(50)
             ->withQueryString()
@@ -78,7 +78,7 @@ class Developer extends BaseModel
                 for ($date = $startOfMonth->copy(); $date <= $endOfMonth; $date->addDay()) {
                     $totalHours = collect($developer->workLogs)
                         ->filter(function ($workLog) use ($date) {
-                            return $workLog['created_at']->toDateString() === $date->toDateString();
+                            return $workLog['date']->toDateString() === $date->toDateString();
                         })
                         ->sum('hrs');
                     $hours[] = $totalHours;
