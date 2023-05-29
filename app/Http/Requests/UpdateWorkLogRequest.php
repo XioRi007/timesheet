@@ -28,6 +28,8 @@ class UpdateWorkLogRequest extends FormRequest
             'rate' => 'numeric|between:0,999.99',
             'hrs' => 'numeric|between:0,999.99',
             'total' => 'numeric|between:0,99999999.99',
-            'status' => 'boolean'];
+            'status' => 'boolean',
+            'date' => 'required|date'
+        ];
     }
 }

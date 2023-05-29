@@ -28,6 +28,7 @@ class StoreWorkLogRequest extends FormRequest
             'rate' => 'required|numeric|between:0,999.99',
             'hrs' => 'required|numeric|between:0,999.99',
             'total' => 'required|numeric|between:0,99999999.99',
+            'date' => 'required|date'
         ];
     }
 }

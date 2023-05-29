@@ -24,6 +24,7 @@ class WorkLog extends BaseModel
         'hrs',
         'total',
         'status',
+        'date'
     ];
 
     /**
@@ -34,6 +35,7 @@ class WorkLog extends BaseModel
     protected $casts = [
         'status' => 'boolean',
         'created_at' => 'datetime:Y-m-d',
+        'date' => 'datetime:Y-m-d',
     ];
 
 

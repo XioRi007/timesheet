@@ -11,6 +11,7 @@ import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {createToast, showToast} from "@/useToast.js"
 import CloseBtn from "@/Components/CloseBtn.vue"
+import DatePicker from "@/Components/DatePicker.vue"
 
 const props = defineProps({
   submitRoute: {
@@ -21,14 +22,13 @@ const props = defineProps({
     type: Object,
     required: false,
     default: {
-      date: '',
       developer_id: null,
       project_id: null,
       rate: 0,
       hrs: 0,
       total: 0,
       status: false,
-      created_at: Date()
+      date: Date()
     }
   },
   rate: {
@@ -51,6 +51,7 @@ const schema = yup.object({
   hrs: maxDecimalPlaces(2).required().min(0.1).max(999.99).typeError('hours are required'),
   total: maxDecimalPlaces(2).required().min(0).max(99999999.99).typeError('total is required'),
   status: yup.string().required().oneOf(["true", "false"]),
+  date: yup.date().required()
 })
 const form = useForm(props.worklog)
 onMounted(() => {
@@ -115,6 +116,16 @@ const changeUrl = (e) => {
         <option v-for="developer in $page.props.developers" :value="developer.id">{{ developer.name }}</option>
       </select>
       <InputError :message="form.errors.developer_id" class="mt-2"/>
+    </div>
+
+
+    <div>
+      <InputLabel for="date" value="Date"/>
+      <DatePicker
+        class="w-full"
+        v-model="form.date"
+      />
+      <InputError :message="form.errors.date" class="mt-2"/>
     </div>
 
     <div>

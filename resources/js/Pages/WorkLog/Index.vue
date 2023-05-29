@@ -37,7 +37,7 @@ useToast();
               :filter-params="$page.props.filterParams"
               :filterFormat="[{
                   name: 'Date',
-                  real: 'created_at',
+                  real: 'date',
                   type: 'date'
                 }, {
                   name: 'Developer',

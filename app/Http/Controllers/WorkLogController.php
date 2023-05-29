@@ -36,12 +36,11 @@ class WorkLogController extends Controller
             ->with('project:id,name')
             ->filter($filterParams)
             ->sort($column, $ascending)
-            ->paginate(50, ['created_at', 'developer_id as developer.full_name', 'developer_id', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
+            ->paginate(50, ['date', 'developer_id as developer.full_name', 'developer_id', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
             ->withQueryString()
             ->through(function ($log, $key) {
                 $log['developer.full_name'] = $log->developer->full_name;
                 $log['project.name'] = $log->project->name;
-                $log['created_at'] = Carbon::parse($log->created_at)->toDateString();
                 unset($log['developer_id']);
                 unset($log['project_id']);
                 unset($log['project']);
@@ -135,6 +134,7 @@ class WorkLogController extends Controller
      */
     public function update(UpdateWorkLogRequest $request, WorkLog $worklog)
     {
+//        dd($request->validated());
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->id, $worklog->created_at);
         $worklog->update($request->validated());
         return redirect(route('worklogs.index'));
