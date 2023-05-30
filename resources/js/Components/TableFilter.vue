@@ -148,8 +148,3 @@ const computedStyles = computed(()=>{
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error"/>
 </template>
-<style>
-.grid-cols-custom {
-    grid-template-columns: repeat(props.filterFormat.length +1, minmax(0, 1fr));
-}
-</style>
