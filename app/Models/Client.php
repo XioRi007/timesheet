@@ -40,11 +40,9 @@ class Client extends BaseModel
 
     /**
      * Returns array of values for selecting in filter
-     * @param  $query
-     * @param  array $filterParams
      * @return  array
      */
-    public function scopeGetFilterData($query, array $filterParams): array
+    public function scopeGetFilterData(): array
     {
         $client = new Client();
         $columns = $client->getConnection()->getSchemaBuilder()->getColumnListing($client->getTable());
@@ -52,7 +50,7 @@ class Client extends BaseModel
 
         $filterData = [];
         foreach ($columns as $_column) {
-            $filterData[$_column] = Client::distinct()->filter($filterParams)->orderBy($_column)->pluck($_column)->toArray();
+            $filterData[$_column] = Client::distinct()->orderBy($_column)->pluck($_column)->toArray();
         }
         return $filterData;
     }

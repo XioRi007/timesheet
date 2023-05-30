@@ -94,7 +94,7 @@ class DeveloperController extends Controller
                 return $log;
             });
         $filterParams['developer_id'] = $developer->id;
-        $filterData = WorkLog::GetFilterData($filterParams);
+        $filterData = WorkLog::GetFilterData();
         return Inertia::render('Developer/WorkLogs', [
             'worklogs' => $workLogs,
             'filterParams' => $filterParams,

@@ -44,7 +44,7 @@ class WorkLogController extends Controller
                 return $log;
             });
 
-        $filterData = WorkLog::GetFilterData($filterParams);
+        $filterData = WorkLog::GetFilterData();
 
         return Inertia::render('WorkLog/Index', [
             'worklogs' => $workLogs,

@@ -95,11 +95,9 @@ class Developer extends BaseModel
 
     /**
      * Returns array of values for selecting in filter
-     * @param  $query
-     * @param  array $filterParams
      * @return  array
      */
-    public function scopeGetFilterData($query, array $filterParams): array
+    public function scopeGetFilterData(): array
     {
         $developer = new Developer();
         $columns = $developer->getConnection()->getSchemaBuilder()->getColumnListing($developer->getTable());
@@ -107,7 +105,7 @@ class Developer extends BaseModel
 
         $filterData = [];
         foreach ($columns as $column) {
-            $filterData[$column] = Developer::distinct()->filter($filterParams)->orderBy($column)->pluck($column)->toArray();
+            $filterData[$column] = Developer::distinct()->orderBy($column)->pluck($column)->toArray();
         }
         return $filterData;
     }

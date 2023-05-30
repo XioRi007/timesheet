@@ -145,11 +145,9 @@ class WorkLog extends BaseModel
 
     /**
      * Returns array of values for selecting in filter
-     * @param  $query
-     * @param  array $filterParams
      * @return  array
      */
-    public function scopeGetFilterData($query, array $filterParams): array
+    public function scopeGetFilterData(): array
     {
         $worklog = new WorkLog();
         $columns = $worklog->getConnection()->getSchemaBuilder()->getColumnListing($worklog->getTable());
@@ -157,7 +155,7 @@ class WorkLog extends BaseModel
 
         $filterData = [];
         foreach ($columns as $column) {
-            $filterData[$column] = WorkLog::distinct()->filter($filterParams)->orderBy($column)->pluck($column)->toArray();
+            $filterData[$column] = WorkLog::distinct()->orderBy($column)->pluck($column)->toArray();
         }
         $filterData['date'] = array_map(function ($item) {
             return \Carbon\Carbon::parse($item)->toDateString();

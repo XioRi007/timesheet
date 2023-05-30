@@ -32,7 +32,7 @@ class ClientController extends Controller
             ->paginate(50, ['id', 'name', 'rate', 'status'])
             ->withQueryString();
 
-        $filterData = Client::GetFilterData($filterParams);
+        $filterData = Client::GetFilterData();
 
         return Inertia::render('Client/Index', [
             'clients' => $clients,

@@ -38,7 +38,7 @@ class ProjectController extends Controller
                 return $project;
             });
 
-        $filterData = Project::GetFilterData($filterParams);
+        $filterData = Project::GetFilterData();
 
         return Inertia::render('Project/Index', [
             'projects' => $projects,
