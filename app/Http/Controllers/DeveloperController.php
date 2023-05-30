@@ -34,7 +34,7 @@ class DeveloperController extends Controller
             ->paginate(50, ['first_name', 'last_name', 'rate', 'status', 'id'])
             ->withQueryString();
 
-        $filterData = Developer::GetFilterData($filterParams);
+        $filterData = Developer::GetFilterData();
 
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
