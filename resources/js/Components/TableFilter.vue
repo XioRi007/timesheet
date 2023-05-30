@@ -35,7 +35,8 @@ const submit = async () => {
   try {
     form.clearErrors()
     router.get('', {
-      filter: form.data()
+      filter: form.data(),
+      page:null
     })
   } catch (err) {
     showToast('Fill the form correctly', 'error')
@@ -52,7 +53,8 @@ const reset = () => {
   router.get('', {
     filter: form.data(),
     column: null,
-    ascending: null
+    ascending: null,
+    page:null
   })
 }
 const computedStyles = computed(()=>{
