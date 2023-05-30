@@ -37,4 +37,23 @@ class Client extends BaseModel
     {
         return $this->hasMany(Project::class);
     }
+
+    /**
+     * Returns array of values for selecting in filter
+     * @param  $query
+     * @param  array $filterParams
+     * @return  array
+     */
+    public function scopeGetFilterData($query, array $filterParams): array
+    {
+        $client = new Client();
+        $columns = $client->getConnection()->getSchemaBuilder()->getColumnListing($client->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+
+        $filterData = [];
+        foreach ($columns as $_column) {
+            $filterData[$_column] = Client::distinct()->filter($filterParams)->orderBy($_column)->pluck($_column)->toArray();
+        }
+        return $filterData;
+    }
 }

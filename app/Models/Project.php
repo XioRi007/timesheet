@@ -47,4 +47,25 @@ class Project extends BaseModel
     {
         return $this->hasMany(WorkLog::class);
     }
+
+    /**
+     * Returns array of values for selecting in filter
+     * @param  $query
+     * @param  array $filterParams
+     * @return  array
+     */
+    public function scopeGetFilterData($query, array $filterParams): array
+    {
+        $project = new Project();
+        $columns = $project->getConnection()->getSchemaBuilder()->getColumnListing($project->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = Project::distinct()->filter($filterParams)->orderBy($column)->pluck($column)->toArray();
+        }
+        $clients = Client::whereIn('id', $filterData['client_id'])->orderBy('name')->get(['name', 'id']);
+        unset($filterData['client_id']);
+        $filterData['clients'] = $clients;
+        return $filterData;
+    }
 }

@@ -6,6 +6,7 @@ use App\Models\Contracts\BaseModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
 class WorkLog extends BaseModel
@@ -140,5 +141,36 @@ class WorkLog extends BaseModel
         return $query->where('status', false)
             ->whereBetween('date', [$start, $end])
             ->sum('total');
+    }
+
+    /**
+     * Returns array of values for selecting in filter
+     * @param  $query
+     * @param  array $filterParams
+     * @return  array
+     */
+    public function scopeGetFilterData($query, array $filterParams): array
+    {
+        $worklog = new WorkLog();
+        $columns = $worklog->getConnection()->getSchemaBuilder()->getColumnListing($worklog->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = WorkLog::distinct()->filter($filterParams)->orderBy($column)->pluck($column)->toArray();
+        }
+        $filterData['date'] = array_map(function ($item) {
+            return \Carbon\Carbon::parse($item)->toDateString();
+        }, $filterData['date']);
+
+        $developers = Developer::whereIn('id', $filterData['developer_id'])->orderBy('first_name')->get(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'));
+        unset($filterData['developer_id']);
+
+        $projects = Project::whereIn('id', $filterData['project_id'])->orderBy('name')->get(['name', 'id']);
+        unset($filterData['project_id']);
+
+        $filterData['developers'] = $developers;
+        $filterData['projects'] = $projects;
+        return $filterData;
     }
 }

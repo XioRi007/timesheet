@@ -68,7 +68,8 @@ useToast();
                 },{
                   name: 'Status',
                   real: 'status',
-                  type: 'status'
+                  type: 'select_status',
+                  data: $page.props.filterData.status
                 }
                ]"
             />

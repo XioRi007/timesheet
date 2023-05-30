@@ -9,7 +9,6 @@ use App\Models\Project;
 use App\Models\User;
 use App\Models\WorkLog;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 
@@ -35,14 +34,7 @@ class DeveloperController extends Controller
             ->paginate(50, ['first_name', 'last_name', 'rate', 'status', 'id'])
             ->withQueryString();
 
-        $developer = new Developer();
-        $columns = $developer->getConnection()->getSchemaBuilder()->getColumnListing($developer->getTable());
-        $columns = array_diff($columns, ['created_at', 'updated_at']);
-
-        $filterData = [];
-        foreach ($columns as $column) {
-            $filterData[$column] = Developer::distinct()->orderBy($column)->pluck($column)->toArray();
-        }
+        $filterData = Developer::GetFilterData($filterParams);
 
         return Inertia::render('Developer/Index', [
             'developers' => $developers,
@@ -93,21 +85,23 @@ class DeveloperController extends Controller
             ->with('project:id,name')
             ->filter($filterParams)
             ->sort($column, $ascending)
-            ->paginate(50, ['created_at', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
+            ->paginate(50, ['date', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
             ->withQueryString()
             ->through(function ($log, $key) {
                 $log['project.name'] = $log->project->name;
-                $log['created_at'] = Carbon::parse($log->created_at)->toDateString();
                 unset($log['project_id']);
                 unset($log['project']);
                 return $log;
             });
+        $filterParams['developer_id'] = $developer->id;
+        $filterData = WorkLog::GetFilterData($filterParams);
         return Inertia::render('Developer/WorkLogs', [
             'worklogs' => $workLogs,
             'filterParams' => $filterParams,
             'projects' => $projects,
             'column' => $column,
             'ascending' => $ascending == 'asc',
+            'filterData' => $filterData
         ]);
     }
 

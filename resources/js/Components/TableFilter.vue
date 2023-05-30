@@ -80,6 +80,17 @@ const computedStyles = computed(()=>{
         step=".01"
         type="number"
       />
+
+      <select
+        v-else-if="column.type === 'select_status'"
+        :id="column.real"
+        v-model="form[column.real]"
+        class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+      >
+        <option :value=null selected></option>
+        <option v-for="item in column.data" :value="item">{{ item ? statusText[0]: statusText[1]}}</option>
+      </select>
+
       <select
         v-else-if="column.type === 'status'"
         :id="column.real"

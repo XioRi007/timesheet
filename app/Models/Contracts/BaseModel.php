@@ -21,24 +21,12 @@ class BaseModel extends Model
     public function scopefilter($query, array $filterParams)
     {
         foreach ($filterParams as $key => $value) {
-            if ($value !== null && $key != 'status' && $key != 'created_at' && $key != 'name' && $key != 'first_name' && $key != 'last_name') {
+            if ($value !== null && $key != 'status') {
                 $query->where($key, $value);
             }
         }
         if (array_key_exists('status', $filterParams) && $filterParams['status'] !== null) {
             $query->where('status', $filterParams['status'] == 'true');
-        }
-        if (array_key_exists('created_at', $filterParams) && $filterParams['created_at'] !== null) {
-            $query->whereDate('created_at', $filterParams['created_at']);
-        }
-        if (array_key_exists('name', $filterParams) && $filterParams['name'] !== null) {
-            $query->where('name', 'LIKE' , '%' . $filterParams['name'] . '%');
-        }
-        if (array_key_exists('first_name', $filterParams) && $filterParams['first_name'] !== null) {
-            $query->where('first_name', 'LIKE' , '%' . $filterParams['first_name'] . '%');
-        }
-        if (array_key_exists('last_name', $filterParams) && $filterParams['last_name'] !== null) {
-            $query->where('last_name', 'LIKE' , '%' . $filterParams['last_name'] . '%');
         }
     }
 

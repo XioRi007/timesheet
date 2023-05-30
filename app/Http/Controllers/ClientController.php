@@ -32,14 +32,7 @@ class ClientController extends Controller
             ->paginate(50, ['id', 'name', 'rate', 'status'])
             ->withQueryString();
 
-        $client = new Client();
-        $columns = $client->getConnection()->getSchemaBuilder()->getColumnListing($client->getTable());
-        $columns = array_diff($columns, ['created_at', 'updated_at']);
-
-        $filterData = [];
-        foreach ($columns as $column) {
-            $filterData[$column] = Client::distinct()->orderBy($column)->pluck($column)->toArray();
-        }
+        $filterData = Client::GetFilterData($filterParams);
 
         return Inertia::render('Client/Index', [
             'clients' => $clients,

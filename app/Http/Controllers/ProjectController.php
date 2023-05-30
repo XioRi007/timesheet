@@ -38,16 +38,7 @@ class ProjectController extends Controller
                 return $project;
             });
 
-        $project = new Project();
-        $columns = $project->getConnection()->getSchemaBuilder()->getColumnListing($project->getTable());
-        $columns = array_diff($columns, ['created_at', 'updated_at']);
-        $filterData = [];
-        foreach ($columns as $column) {
-            $filterData[$column] = Project::distinct()->orderBy($column)->pluck($column)->toArray();
-        }
-        $clients = Client::whereIn('id', $filterData['client_id'])->orderBy('name')->get(['name', 'id']);
-        unset($filterData['client_id']);
-        $filterData['clients'] = $clients;
+        $filterData = Project::GetFilterData($filterParams);
 
         return Inertia::render('Project/Index', [
             'projects' => $projects,

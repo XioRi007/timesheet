@@ -93,4 +93,22 @@ class Developer extends BaseModel
         return $developers;
     }
 
+    /**
+     * Returns array of values for selecting in filter
+     * @param  $query
+     * @param  array $filterParams
+     * @return  array
+     */
+    public function scopeGetFilterData($query, array $filterParams): array
+    {
+        $developer = new Developer();
+        $columns = $developer->getConnection()->getSchemaBuilder()->getColumnListing($developer->getTable());
+        $columns = array_diff($columns, ['created_at', 'updated_at']);
+
+        $filterData = [];
+        foreach ($columns as $column) {
+            $filterData[$column] = Developer::distinct()->filter($filterParams)->orderBy($column)->pluck($column)->toArray();
+        }
+        return $filterData;
+    }
 }

@@ -8,7 +8,6 @@ use App\Http\Requests\UpdateWorkLogRequest;
 use App\Models\Developer;
 use App\Models\Project;
 use App\Models\WorkLog;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -31,7 +30,6 @@ class WorkLogController extends Controller
         $ascending = $query['ascending'];
         $workLogs = WorkLog::with('developer:id,first_name,last_name')
             ->with('project:id,name')
-            ->orderBy('created_at', 'DESC')
             ->filter($filterParams)
             ->sort($column, $ascending)
             ->paginate(50, ['date', 'developer_id as developer.full_name', 'developer_id', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
@@ -46,26 +44,7 @@ class WorkLogController extends Controller
                 return $log;
             });
 
-        $worklog = new WorkLog();
-        $columns = $worklog->getConnection()->getSchemaBuilder()->getColumnListing($worklog->getTable());
-        $columns = array_diff($columns, ['created_at', 'updated_at']);
-
-        $filterData = [];
-        foreach ($columns as $column) {
-            $filterData[$column] = WorkLog::distinct()->orderBy($column)->pluck($column)->toArray();
-        }
-        $filterData['date'] = array_map(function ($item) {
-            return Carbon::parse($item)->toDateString();
-        }, $filterData['date']);
-
-        $developers = Developer::whereIn('id', $filterData['developer_id'])->orderBy('first_name')->get(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'));
-        unset($filterData['developer_id']);
-
-        $projects = Project::whereIn('id', $filterData['project_id'])->orderBy('name')->get(['name', 'id']);
-        unset($filterData['project_id']);
-
-        $filterData['developers'] = $developers;
-        $filterData['projects'] = $projects;
+        $filterData = WorkLog::GetFilterData($filterParams);
 
         return Inertia::render('WorkLog/Index', [
             'worklogs' => $workLogs,
