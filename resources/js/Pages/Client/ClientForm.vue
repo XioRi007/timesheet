@@ -1,15 +1,13 @@
 <script setup>
-import PrimaryButton from "@/Components/PrimaryButton.vue"
 import InputLabel from "@/Components/InputLabel.vue"
 import TextInput from "@/Components/TextInput.vue"
 import InputError from "@/Components/InputError.vue"
-import {router, useForm} from "@inertiajs/vue3"
+import {useForm} from "@inertiajs/vue3"
 import Toggle from "@/Components/Toggle.vue"
-import SecondaryButton from "@/Components/SecondaryButton.vue"
 import * as yup from "yup"
 import {maxDecimalPlaces} from "@/validation.js"
 import {createToast, showToast} from "@/useToast.js"
-import CloseBtn from "@/Components/CloseBtn.vue"
+import StyledButton from "@/Components/StyledButton.vue"
 
 
 const props = defineProps({
@@ -95,8 +93,19 @@ const submit = async () => {
     </div>
 
     <div class="flex items-center gap-4 justify-between">
-      <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-      <SecondaryButton :disabled="form.processing" @click.prevent="form.reset()">Reset</SecondaryButton>
+      <StyledButton
+        :disabled="form.processing"
+        variant="primary"
+      >
+        Save
+      </StyledButton>
+      <StyledButton
+        :disabled="form.processing"
+        variant="secondary"
+        @click.prevent="form.reset()"
+      >
+        Reset
+      </StyledButton>
       <Transition class="transition ease-in-out" enter-from-class="opacity-0" leave-to-class="opacity-0">
         <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
       </Transition>

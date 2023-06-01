@@ -34,34 +34,10 @@ class Developer extends BaseModel
     ];
 
     /**
-     * Get the user.
-     */
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
-    /**
-     * Get the work logs of the developer.
-     */
-    public function workLogs(): HasMany
-    {
-        return $this->hasMany(WorkLog::class);
-    }
-
-
-    /**
-     * Get the full name of the developer.
-     */
-    public function getFullNameAttribute(): string
-    {
-        return $this->first_name . ' ' . $this->last_name;
-    }
-
-    /**
      * Returns developer name and array of hours worked in month
      * @param  $startOfMonth
      * @param  $endOfMonth
+     * @return mixed
      */
     public static function getDevelopersWorkLogHoursByMonth($startOfMonth, $endOfMonth)
     {
@@ -73,7 +49,7 @@ class Developer extends BaseModel
             })
             ->paginate(50)
             ->withQueryString()
-            ->through(function ($developer, $key) use ($startOfMonth, $endOfMonth){
+            ->through(function ($developer, $key) use ($startOfMonth, $endOfMonth) {
                 $hours = [];
                 for ($date = $startOfMonth->copy(); $date <= $endOfMonth; $date->addDay()) {
                     $totalHours = collect($developer->workLogs)
@@ -94,10 +70,34 @@ class Developer extends BaseModel
     }
 
     /**
+     * Get the user.
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the work logs of the developer.
+     */
+    public function workLogs(): HasMany
+    {
+        return $this->hasMany(WorkLog::class);
+    }
+
+    /**
+     * Get the full name of the developer.
+     */
+    public function getFullNameAttribute(): string
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
+
+    /**
      * Returns array of values for selecting in filter
      * @return  array
      */
-    public function scopeGetFilterData(): array
+    public static function GetFilterData(): array
     {
         $developer = new Developer();
         $columns = $developer->getConnection()->getSchemaBuilder()->getColumnListing($developer->getTable());

@@ -1,11 +1,10 @@
 <script setup>
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 import {Link, useForm, usePage} from '@inertiajs/vue3'
 import * as yup from "yup"
-import SecondaryButton from "@/Components/SecondaryButton.vue"
+import StyledButton from "@/Components/StyledButton.vue"
 
 defineProps({
   mustVerifyEmail: {
@@ -18,11 +17,9 @@ defineProps({
 
 const user = usePage().props.auth.user
 const schema = yup.object({
-  name: yup.string().required(),
   email: yup.string().required().email(),
 })
 const form = useForm({
-  name: user.name,
   email: user.email,
 })
 const submit = async () => {
@@ -53,6 +50,7 @@ const submit = async () => {
         <InputLabel for="email" value="Email"/>
 
         <TextInput
+          dusk="email"
           id="email"
           type="email"
           class="mt-1 block w-full"
@@ -85,8 +83,21 @@ const submit = async () => {
       </div>
 
       <div class="flex items-center gap-4">
-        <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-        <SecondaryButton :disabled="form.processing" @click.prevent="form.reset()">Reset</SecondaryButton>
+        <StyledButton
+          :disabled="form.processing"
+          variant="primary"
+          dusk="submit"
+        >
+          Save
+        </StyledButton>
+        <StyledButton
+          :disabled="form.processing"
+          variant="secondary"
+          @click.prevent="form.reset()"
+          dusk="reset"
+        >
+          Reset
+        </StyledButton>
 
         <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
           <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>

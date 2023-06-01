@@ -1,13 +1,12 @@
 <script setup>
 import TextInput from "@/Components/TextInput.vue"
 import InputLabel from "@/Components/InputLabel.vue"
-import SecondaryButton from "@/Components/SecondaryButton.vue"
-import PrimaryButton from "@/Components/PrimaryButton.vue"
 import InputError from "@/Components/InputError.vue"
 import {router, useForm} from "@inertiajs/vue3"
 import {showToast} from "@/useToast.js"
 import DatePicker from "@/Components/DatePicker.vue"
 import {computed} from "vue"
+import StyledButton from "@/Components/StyledButton.vue"
 
 const props = defineProps({
   filterParams: {
@@ -142,8 +141,22 @@ const computedStyles = computed(()=>{
       />
     </div>
     <div class="flex justify-between">
-      <PrimaryButton :disabled="form.processing" class=" h-10 w-2/4 mr-1" type="submit">Filter</PrimaryButton>
-      <SecondaryButton :disabled="form.processing" class="h-10 w-2/4" @click="reset">Reset</SecondaryButton>
+      <StyledButton
+        :disabled="form.processing"
+        class=" h-10 w-2/4 mr-1"
+        type="submit"
+        variant="primary"
+      >
+        Filter
+      </StyledButton>
+      <StyledButton
+        :disabled="form.processing"
+        class="h-10 w-2/4"
+        @click="reset"
+        variant="secondary"
+      >
+        Reset
+      </StyledButton>
     </div>
   </form>
   <InputError class="mb-2" v-for="error in form.errors" :message="error"/>

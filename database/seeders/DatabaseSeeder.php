@@ -19,8 +19,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $adminRole = Role::create(['name' => 'admin']);
-        Role::create(['name' => 'developer']);
+        $this->call([
+            RoleSeeder::class,
+            AdminSeeder::class
+        ]);
 
         $clients = Client::factory(60)->create();
         foreach ($clients as $client) {
@@ -35,9 +37,5 @@ class DatabaseSeeder extends Seeder
                 'project_id' => rand(1, 120)
             ]);
         }
-        $admin = User::factory()->create([
-            'email' => 'admin@email.com'
-        ]);
-        $admin->assignRole($adminRole);
     }
 }

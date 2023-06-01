@@ -31,9 +31,9 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = null;
-        if($request->user() != null){
+        if ($request->user() != null) {
             $user = $request->user()->load('roles:name');
-            if($user->hasRole('developer')){
+            if ($user->hasRole('developer')) {
                 $user->load('developer');
             }
         }

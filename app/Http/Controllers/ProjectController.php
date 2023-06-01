@@ -6,9 +6,11 @@ use App\Http\Requests\StoreProjectRequest;
 use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Client;
 use App\Models\Project;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Throwable;
 
 class ProjectController extends Controller
 {
@@ -16,6 +18,7 @@ class ProjectController extends Controller
     {
         $this->authorizeResource(Project::class, 'project');
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -27,14 +30,12 @@ class ProjectController extends Controller
         $ascending = $query['ascending'];
         $projects = Project::with('client:id,name')
             ->filter($filterParams)
-            ->orderBy('created_at', 'DESC')
             ->sort($column, $ascending)
             ->paginate(50, ['name', 'client_id as client.name', 'client_id', 'rate', 'status', 'id'])
             ->withQueryString()
-            ->through(function ($project, $key) {
+            ->through(function ($project) {
                 $project['client.name'] = $project->client->name;
-                unset($project['client_id']);
-                unset($project['client']);
+                unset($project['client_id'], $project['client']);
                 return $project;
             });
 
@@ -66,7 +67,7 @@ class ProjectController extends Controller
         $clients = Client::all('id', 'name');
         return Inertia::render('Project/Create', [
             'clients' => $clients,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -87,7 +88,7 @@ class ProjectController extends Controller
         return Inertia::render('Project/Edit', [
             'project' => $project,
             'clients' => $clients,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -107,9 +108,9 @@ class ProjectController extends Controller
     {
         try {
             $project->delete();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($e->getCode() == 23000) {
-                throw new \Exception('You cannot delete project with work logs');
+                throw new Exception('You cannot delete project with work logs');
             } else {
                 throw $e;
             }

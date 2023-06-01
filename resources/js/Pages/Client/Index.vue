@@ -4,8 +4,8 @@ import {Head} from '@inertiajs/vue3'
 import DataTable from "@/Components/DataTable.vue"
 import Title from "@/Components/Title.vue"
 import {useToast} from "@/useToast.js"
-import AddLink from "@/Components/AddLink.vue"
 import Pagination from "@/Components/Pagination.vue"
+import StyledLink from "@/Components/StyledLink.vue"
 
 useToast();
 </script>
@@ -23,8 +23,11 @@ useToast();
         <div class="bg-white overflow-hidden p-10">
           <div
             class="relative ">
-            <AddLink create-link="clients.create"/>
-
+            <StyledLink
+              :href="route('clients.create')"
+              icon="fa-solid fa-plus"
+              variant="add"
+            />
             <DataTable
               :data="$page.props.clients.data"
               :has-actions=true

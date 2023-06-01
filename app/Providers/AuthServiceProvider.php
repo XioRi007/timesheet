@@ -2,8 +2,16 @@
 
 namespace App\Providers;
 
- use App\Models\Client;use App\Models\Developer;use App\Models\Project;use App\Models\WorkLog;use App\Policies\ClientPolicy;use App\Policies\DeveloperPolicy;use App\Policies\ProjectPolicy;use App\Policies\WorkLogPolicy;use Illuminate\Support\Facades\Gate;
+use App\Models\Client;
+use App\Models\Developer;
+use App\Models\Project;
+use App\Models\WorkLog;
+use App\Policies\ClientPolicy;
+use App\Policies\DeveloperPolicy;
+use App\Policies\ProjectPolicy;
+use App\Policies\WorkLogPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {

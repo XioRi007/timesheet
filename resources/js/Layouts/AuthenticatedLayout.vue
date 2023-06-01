@@ -1,14 +1,19 @@
 <script setup>
-import {ref} from 'vue'
+import {computed, ref} from 'vue'
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import Dropdown from '@/Components/Dropdown.vue'
 import DropdownLink from '@/Components/DropdownLink.vue'
-import NavLink from '@/Components/NavLink.vue'
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
-import {Link} from '@inertiajs/vue3'
-import UserName from "@/Components/UserName.vue"
+import {Link, usePage} from '@inertiajs/vue3'
+import StyledLink from "@/Components/StyledLink.vue"
 
+const page = usePage()
 const showingNavigationDropdown = ref(false)
+const userName = computed(() => {
+  if (page.props.auth.user.roles.some(role => role.name === 'developer')) {
+    return page.props.auth.user.developer.first_name + " " + page.props.auth.user.developer.last_name
+  }
+  return 'admin'
+})
 </script>
 
 <template>
@@ -28,28 +33,35 @@ const showingNavigationDropdown = ref(false)
                 </Link>
               </div>
               <!-- Navigation Links -->
-              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')">
-                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
+                   v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')">
+                <StyledLink :href="route('dashboard')" :active="route().current('dashboard')" variant="nav">
                   Dashboard
-                </NavLink>
-                <NavLink :href="route('clients.index')" :active="route().current('clients.index')">
+                </StyledLink>
+                <StyledLink :href="route('clients.index')" :active="route().current('clients.index')" variant="nav">
                   Clients
-                </NavLink>
-                <NavLink :href="route('projects.index')" :active="route().current('projects.index')">
+                </StyledLink>
+                <StyledLink :href="route('projects.index')" :active="route().current('projects.index')" variant="nav">
                   Projects
-                </NavLink>
-                <NavLink :href="route('developers.index')" :active="route().current('developers.index')">
+                </StyledLink>
+                <StyledLink :href="route('developers.index')" :active="route().current('developers.index')"
+                            variant="nav">
                   Developers
-                </NavLink>
-                <NavLink :href="route('worklogs.index')" :active="route().current('worklogs.index')">
+                </StyledLink>
+                <StyledLink :href="route('worklogs.index')" :active="route().current('worklogs.index')" variant="nav">
                   Work Logs
-                </NavLink>
+                </StyledLink>
               </div>
 
-              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex" v-if="$page.props.auth.user.roles.some(role => role.name === 'developer')">
-                <NavLink :href="route('developers.worklogs', $page.props.auth.user.developer.id)" :active="route().current('developers.worklogs', $page.props.auth.user.developer.id)">
+              <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
+                   v-if="$page.props.auth.user.roles.some(role => role.name === 'developer')">
+                <StyledLink
+                  :href="route('developers.worklogs', $page.props.auth.user.developer.id)"
+                  :active="route().current('developers.worklogs', $page.props.auth.user.developer.id)"
+                  variant="nav"
+                >
                   Work Logs
-                </NavLink>
+                </StyledLink>
               </div>
 
             </div>
@@ -61,10 +73,11 @@ const showingNavigationDropdown = ref(false)
                   <template #trigger>
                                         <span class="inline-flex rounded-md">
                                             <button
+                                              dusk="profile_btn"
                                               type="button"
                                               class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150"
                                             >
-                                                <UserName/>
+                                                {{ userName }}
 
                                                 <svg
                                                   class="ml-2 -mr-0.5 h-4 w-4"
@@ -84,7 +97,7 @@ const showingNavigationDropdown = ref(false)
 
                   <template #content>
                     <DropdownLink :href="route('profile.edit')"> Profile</DropdownLink>
-                    <DropdownLink :href="route('logout')" method="post" as="button">
+                    <DropdownLink :href="route('logout')" method="post" as="button" dusk="logout">
                       Log Out
                     </DropdownLink>
                   </template>
@@ -132,45 +145,49 @@ const showingNavigationDropdown = ref(false)
           v-if="$page.props.auth.user.roles.some(role => role.name === 'admin')"
         >
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
+            <StyledLink :href="route('dashboard')" :active="route().current('dashboard')" variant="responsive-nav">
               Dashboard
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('clients.index')" :active="route().current('clients.index')">
+            <StyledLink :href="route('clients.index')" :active="route().current('clients.index')"
+                        variant="responsive-nav">
               Clients
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('projects.index')" :active="route().current('projects.index')">
+            <StyledLink :href="route('projects.index')" :active="route().current('projects.index')"
+                        variant="responsive-nav">
               Projects
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('developers.index')" :active="route().current('developers.index')">
+            <StyledLink :href="route('developers.index')" :active="route().current('developers.index')"
+                        variant="responsive-nav">
               Developers
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('worklogs.index')" :active="route().current('worklogs.index')">
+            <StyledLink :href="route('worklogs.index')" :active="route().current('worklogs.index')"
+                        variant="responsive-nav">
               Work Logs
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
 
           <!-- Responsive Settings Options -->
           <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-              <div class="font-medium text-base text-gray-800">
-                <UserName/>
+              <div class="font-medium text-base text-gray-800" dusk="profile_btn">
+                {{ userName }}
               </div>
               <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
-              <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
-              <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+              <StyledLink :href="route('profile.edit')" variant="responsive-nav"> Profile</StyledLink>
+              <StyledLink :href="route('logout')" method="post" as="button" dusk="logout" variant="responsive-nav">
                 Log Out
-              </ResponsiveNavLink>
+              </StyledLink>
             </div>
           </div>
         </div>
@@ -181,25 +198,29 @@ const showingNavigationDropdown = ref(false)
           v-if="$page.props.auth.user.roles.some(role => role.name === 'developer')"
         >
           <div class="pt-2 pb-3 space-y-1">
-            <ResponsiveNavLink :href="route('developers.worklogs', $page.props.auth.user.developer.id)" :active="route().current('developers.worklogs', $page.props.auth.user.developer.id)">
+            <StyledLink
+              :href="route('developers.worklogs', $page.props.auth.user.developer.id)"
+              :active="route().current('developers.worklogs', $page.props.auth.user.developer.id)"
+              variant="responsive-nav"
+            >
               Work Logs
-            </ResponsiveNavLink>
+            </StyledLink>
           </div>
 
           <!-- Responsive Settings Options -->
           <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="px-4">
-              <div class="font-medium text-base text-gray-800">
-                <UserName/>
+              <div class="font-medium text-base text-gray-800" dusk="profile_btn">
+                {{ userName }}
               </div>
               <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
             </div>
 
             <div class="mt-3 space-y-1">
-              <ResponsiveNavLink :href="route('profile.edit')"> Profile</ResponsiveNavLink>
-              <ResponsiveNavLink :href="route('logout')" method="post" as="button">
+              <StyledLink :href="route('profile.edit')" variant="responsive-nav"> Profile</StyledLink>
+              <StyledLink :href="route('logout')" method="post" as="button" dusk="logout" variant="responsive-nav">
                 Log Out
-              </ResponsiveNavLink>
+              </StyledLink>
             </div>
           </div>
         </div>

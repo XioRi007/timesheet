@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Contracts\BaseModel;
+use DateTimeInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
@@ -16,7 +17,7 @@ class WorkLog extends BaseModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var  array
      */
     protected $fillable = [
         'developer_id',
@@ -31,30 +32,13 @@ class WorkLog extends BaseModel
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var  array
      */
     protected $casts = [
         'status' => 'boolean',
         'created_at' => 'datetime:Y-m-d',
         'date' => 'datetime:Y-m-d',
     ];
-
-
-    /**
-     * Get the developer that works.
-     */
-    public function developer(): BelongsTo
-    {
-        return $this->belongsTo(Developer::class);
-    }
-
-    /**
-     * Get the project.
-     */
-    public function project(): BelongsTo
-    {
-        return $this->belongsTo(Project::class);
-    }
 
     /**
      * Returns rate based on developer's project's or client's
@@ -83,6 +67,22 @@ class WorkLog extends BaseModel
             }
         }
         return 0;
+    }
+
+    /**
+     * Get the developer that works.
+     */
+    public function developer(): BelongsTo
+    {
+        return $this->belongsTo(Developer::class);
+    }
+
+    /**
+     * Get the project.
+     */
+    public function project(): BelongsTo
+    {
+        return $this->belongsTo(Project::class);
     }
 
     /**
@@ -118,11 +118,11 @@ class WorkLog extends BaseModel
     /**
      * Sum of payed worklogs between dates
      * @param  $query
-     * @param  \DateTimeInterface  $start
-     * @param  \DateTimeInterface  $end
-     * @return  mixed
+     * @param  DateTimeInterface  $start
+     * @param  DateTimeInterface  $end
+     * @return mixed
      */
-    public function scopeTotalPayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
+    public function scopeTotalPayed($query, DateTimeInterface $start, DateTimeInterface $end): mixed
     {
         return $query->where('status', true)
             ->whereBetween('date', [$start, $end])
@@ -132,11 +132,11 @@ class WorkLog extends BaseModel
     /**
      * Sum of unpayed worklogs between dates
      * @param  $query
-     * @param  \DateTimeInterface $start
-     * @param  \DateTimeInterface $end
+     * @param  DateTimeInterface  $start
+     * @param  DateTimeInterface  $end
      * @return  mixed
      */
-    public function scopeTotalUnpayed($query, \DateTimeInterface $start, \DateTimeInterface $end)
+    public function scopeTotalUnpayed($query, DateTimeInterface $start, DateTimeInterface $end): mixed
     {
         return $query->where('status', false)
             ->whereBetween('date', [$start, $end])
@@ -147,7 +147,7 @@ class WorkLog extends BaseModel
      * Returns array of values for selecting in filter
      * @return  array
      */
-    public function scopeGetFilterData(): array
+    public static function GetFilterData(): array
     {
         $worklog = new WorkLog();
         $columns = $worklog->getConnection()->getSchemaBuilder()->getColumnListing($worklog->getTable());

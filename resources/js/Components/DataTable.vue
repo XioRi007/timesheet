@@ -1,14 +1,11 @@
 <script setup>
-import {Link, router, useForm} from '@inertiajs/vue3'
-import {onMounted, ref} from "vue"
+import {Link, router} from '@inertiajs/vue3'
+import {ref} from "vue"
 import DeleteItemModal from "@/Components/DeleteItemModal.vue"
 import axios from "axios"
 import {showToast} from "@/useToast.js"
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome"
 import TableFilter from "@/Components/TableFilter.vue"
-import TextInput from "@/Components/TextInput.vue"
-import SecondaryButton from "@/Components/SecondaryButton.vue"
-import PrimaryButton from "@/Components/PrimaryButton.vue"
 
 const props = defineProps({
   data: {

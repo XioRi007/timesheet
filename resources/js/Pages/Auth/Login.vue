@@ -3,10 +3,10 @@ import Checkbox from '@/Components/Checkbox.vue'
 import GuestLayout from '@/Layouts/GuestLayout.vue'
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 import {Head, useForm} from '@inertiajs/vue3'
 import * as yup from "yup"
+import StyledButton from "@/Components/StyledButton.vue"
 
 defineProps({
   canResetPassword: {
@@ -55,12 +55,13 @@ const submit = async () => {
         <InputLabel for="email" value="Email"/>
 
         <TextInput
+          dusk="email"
           id="email"
           type="email"
           class="mt-1 block w-full"
           v-model="form.email"
           autofocus
-          autocomplete="username"
+          autocomplete="email"
         />
 
         <InputError class="mt-2" :message="form.errors.email"/>
@@ -70,6 +71,7 @@ const submit = async () => {
         <InputLabel for="password" value="Password"/>
 
         <TextInput
+          dusk="password"
           id="password"
           type="password"
           class="mt-1 block w-full"
@@ -82,15 +84,21 @@ const submit = async () => {
 
       <div class="block mt-4">
         <label class="flex items-center">
-          <Checkbox name="remember" v-model:checked="form.remember"/>
+          <Checkbox name="remember" v-model:checked="form.remember" dusk="remember"/>
           <span class="ml-2 text-sm text-gray-600">Remember me</span>
         </label>
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+        <StyledButton
+          variant="primary"
+          class="ml-4"
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+          dusk="submit"
+        >
           Log in
-        </PrimaryButton>
+        </StyledButton>
       </div>
     </form>
   </GuestLayout>

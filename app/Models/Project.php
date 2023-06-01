@@ -14,7 +14,7 @@ class Project extends BaseModel
     /**
      * The attributes that are mass assignable.
      *
-     * @var array
+     * @var  array
      */
     protected $fillable = [
         'client_id',
@@ -26,7 +26,7 @@ class Project extends BaseModel
     /**
      * The attributes that should be cast.
      *
-     * @var array
+     * @var  array
      */
     protected $casts = [
         'status' => 'boolean',
@@ -52,7 +52,7 @@ class Project extends BaseModel
      * Returns array of values for selecting in filter
      * @return  array
      */
-    public function scopeGetFilterData(): array
+    public static function GetFilterData(): array
     {
         $project = new Project();
         $columns = $project->getConnection()->getSchemaBuilder()->getColumnListing($project->getTable());

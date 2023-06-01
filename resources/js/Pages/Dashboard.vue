@@ -4,7 +4,6 @@ import {Head} from '@inertiajs/vue3'
 import MonthTable from "@/Components/MonthTable.vue"
 import Title from "@/Components/Title.vue"
 import Pagination from "@/Components/Pagination.vue"
-
 </script>
 
 <template>

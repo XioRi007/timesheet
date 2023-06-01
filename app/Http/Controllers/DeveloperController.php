@@ -8,9 +8,11 @@ use App\Models\Developer;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\WorkLog;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
+use Throwable;
 
 class DeveloperController extends Controller
 {
@@ -30,7 +32,6 @@ class DeveloperController extends Controller
         $ascending = $query['ascending'];
         $developers = Developer::filter($filterParams)
             ->sort($column, $ascending)
-            ->orderBy('created_at', 'DESC')
             ->paginate(50, ['first_name', 'last_name', 'rate', 'status', 'id'])
             ->withQueryString();
 
@@ -67,7 +68,7 @@ class DeveloperController extends Controller
     public function create(Request $request)
     {
         return Inertia::render('Developer/Create', [
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -112,7 +113,7 @@ class DeveloperController extends Controller
     {
         return Inertia::render('Developer/Edit', [
             'developer' => $developer,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -132,9 +133,9 @@ class DeveloperController extends Controller
     {
         try {
             $developer->delete();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($e->getCode() == 23000) {
-                throw new \Exception('You cannot delete developer with work logs');
+                throw new Exception('You cannot delete developer with work logs');
             } else {
                 throw $e;
             }

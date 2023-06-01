@@ -1,7 +1,6 @@
 <script setup>
-import SecondaryButton from "@/Components/SecondaryButton.vue"
-import DangerButton from "@/Components/DangerButton.vue"
 import Modal from "@/Components/Modal.vue"
+import StyledButton from "@/Components/StyledButton.vue"
 
 defineProps({
   entityName: {
@@ -35,13 +34,19 @@ defineProps({
       </h2>
       <p class="text-red-600 text-center py-2">{{ error }}</p>
       <div class="mt-6 flex justify-center">
-        <SecondaryButton @click="close"> Cancel</SecondaryButton>
-        <DangerButton
+        <StyledButton
+          variant="secondary"
+          @click="close"
+        >
+          Cancel
+        </StyledButton>
+        <StyledButton
+          variant="danger"
           class="ml-3"
           @click="deleteItem(item)"
-        >
+          >
           Delete
-        </DangerButton>
+        </StyledButton>
       </div>
     </div>
   </Modal>

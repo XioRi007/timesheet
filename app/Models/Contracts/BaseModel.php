@@ -18,7 +18,7 @@ class BaseModel extends Model
      * @param  array  $filterParams
      * @return  void
      */
-    public function scopefilter($query, array $filterParams)
+    public function scopefilter($query, array $filterParams): void
     {
         foreach ($filterParams as $key => $value) {
             if ($value !== null && $key != 'status') {
@@ -30,17 +30,17 @@ class BaseModel extends Model
         }
     }
 
-    public function scopesort($query, string $column, string $ascending)
+    public function scopesort($query, string $column, string $ascending): void
     {
         if (str_contains($column, '.')) {
             $arr = explode(".", $column);
             $model = "App\Models\\" . ucfirst($arr[0]);
-            if($arr[1] == 'full_name'){
+            if ($arr[1] == 'full_name') {
                 $arr[1] = 'CONCAT(first_name, " ", last_name) AS full_name';
             }
             $table = $this->getTable();
             $query->orderBy($model::selectRaw($arr[1])->
-                whereColumn("id", rtrim($table) . '.' . $arr[0].'_id'),
+            whereColumn("id", rtrim($table) . '.' . $arr[0] . '_id'),
                 $ascending
             );
         } else {

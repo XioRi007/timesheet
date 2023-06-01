@@ -29,7 +29,7 @@ class Controller extends BaseController
         }
         if ($request->query->has('ascending')) {
             $ascending = $request->query('ascending');
-            $ascending = $ascending == 'true' ? 'asc': 'desc';
+            $ascending = $ascending == 'true' ? 'asc' : 'desc';
         } else {
             $ascending = 'desc';
         }

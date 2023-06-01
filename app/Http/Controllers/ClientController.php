@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Models\Client;
+use Exception;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Throwable;
 
 class ClientController extends Controller
 {
@@ -28,7 +30,6 @@ class ClientController extends Controller
         $ascending = $query['ascending'];
         $clients = Client::filter($filterParams)
             ->sort($column, $ascending)
-            ->orderBy('created_at', 'DESC')
             ->paginate(50, ['id', 'name', 'rate', 'status'])
             ->withQueryString();
 
@@ -58,7 +59,7 @@ class ClientController extends Controller
     public function create(Request $request): Response
     {
         return Inertia::render('Client/Create', [
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -77,7 +78,7 @@ class ClientController extends Controller
     {
         return Inertia::render('Client/Edit', [
             'client' => $client,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -97,9 +98,9 @@ class ClientController extends Controller
     {
         try {
             $client->delete();
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             if ($e->getCode() == 23000) {
-                throw new \Exception('You cannot delete client with projects');
+                throw new Exception('You cannot delete client with projects');
             } else {
                 throw $e;
             }

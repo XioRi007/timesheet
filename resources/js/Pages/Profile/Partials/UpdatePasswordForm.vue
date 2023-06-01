@@ -1,12 +1,11 @@
 <script setup>
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 import {useForm} from '@inertiajs/vue3'
 import {ref} from 'vue'
 import * as yup from "yup"
-import SecondaryButton from "@/Components/SecondaryButton.vue"
+import StyledButton from "@/Components/StyledButton.vue"
 
 const passwordInput = ref(null)
 const currentPasswordInput = ref(null)
@@ -104,8 +103,20 @@ const updatePassword = async () => {
       </div>
 
       <div class="flex items-center gap-4">
-        <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-        <SecondaryButton :disabled="form.processing" @click.prevent="form.reset()">Reset</SecondaryButton>
+        <StyledButton
+          :disabled="form.processing"
+          variant="primary"
+          dusk="password_submit"
+        >
+          Save
+        </StyledButton>
+        <StyledButton
+          :disabled="form.processing"
+          variant="secondary"
+          @click.prevent="form.reset()"
+        >
+          Reset
+        </StyledButton>
 
         <Transition enter-from-class="opacity-0" leave-to-class="opacity-0" class="transition ease-in-out">
           <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>

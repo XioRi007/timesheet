@@ -19,6 +19,7 @@ class WorkLogController extends Controller
     {
         $this->authorizeResource(WorkLog::class, 'workLog');
     }
+
     /**
      * Display a listing of the resource.
      */
@@ -34,13 +35,10 @@ class WorkLogController extends Controller
             ->sort($column, $ascending)
             ->paginate(50, ['date', 'developer_id as developer.full_name', 'developer_id', 'project_id as project.name', 'project_id', 'rate', 'hrs', 'total', 'status', 'id'])
             ->withQueryString()
-            ->through(function ($log, $key) {
+            ->through(function ($log) {
                 $log['developer.full_name'] = $log->developer->full_name;
                 $log['project.name'] = $log->project->name;
-                unset($log['developer_id']);
-                unset($log['project_id']);
-                unset($log['project']);
-                unset($log['developer']);
+                unset($log['developer_id'], $log['project_id'], $log['project'], $log['developer']);
                 return $log;
             });
 
@@ -62,8 +60,9 @@ class WorkLogController extends Controller
     {
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'));
         WorkLog::create($request->validated());
-        if($request->user()->hasRole('developer')){
-            WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'), $request->validated('date'));
+        if ($request->user()->hasRole('developer')) {
+            WorkLogCreatedByDeveloper::dispatch($request->validated('developer_id'), $request->validated('project_id'),
+                $request->validated('date'));
             return to_route('developers.worklogs', $request->user()->developer->id);
         }
         return redirect(route('worklogs.index'));
@@ -76,10 +75,10 @@ class WorkLogController extends Controller
     {
         $res = $this->getDeveloperProjectRate($request);
         $user = $request->user();
-        if($user->hasRole('developer')){
+        if ($user->hasRole('developer')) {
             $developer = $user->developer->id;
             $developers = [];
-        }else{
+        } else {
             $developer = $res['developer'];
             $developers = Developer::select(DB::raw('id, CONCAT(first_name, " ", last_name) AS name'))->get();
         }
@@ -93,8 +92,26 @@ class WorkLogController extends Controller
             'rate' => $rate,
             'developer' => $developer,
             'project' => $project,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
+    }
+
+    private function getDeveloperProjectRate(Request $request): array
+    {
+        $developer = null;
+        $project = null;
+        if ($request->query->has('developer')) {
+            $developer = intval($request->query->get('developer'));
+        }
+        if ($request->query->has('project')) {
+            $project = intval($request->query->get('project'));
+        }
+        $rate = WorkLog::GetRate($developer, $project);
+        return [
+            'developer' => $developer,
+            'project' => $project,
+            'rate' => $rate,
+        ];
     }
 
     /**
@@ -123,7 +140,7 @@ class WorkLogController extends Controller
             'rate' => $rate,
             'developer' => $developer,
             'project' => $project,
-            'backLink'=>$request->header('referer')
+            'backLink' => $request->header('referer')
         ]);
     }
 
@@ -132,7 +149,6 @@ class WorkLogController extends Controller
      */
     public function update(UpdateWorkLogRequest $request, WorkLog $worklog)
     {
-//        dd($request->validated());
         WorkLog::CheckMaxHoursToday($request->validated('developer_id'), $request->validated('hrs'), $worklog->date, $worklog->id);
         $worklog->update($request->validated());
         return redirect(route('worklogs.index'));
@@ -144,23 +160,5 @@ class WorkLogController extends Controller
     public function destroy(WorkLog $worklog)
     {
         $worklog->delete();
-    }
-
-    private function getDeveloperProjectRate(Request $request): array
-    {
-        $developer = null;
-        $project = null;
-        if ($request->query->has('developer')) {
-            $developer = intval($request->query->get('developer'));
-        }
-        if ($request->query->has('project')) {
-            $project = intval($request->query->get('project'));
-        }
-        $rate = WorkLog::GetRate($developer, $project);
-        return [
-            'developer' => $developer,
-            'project' => $project,
-            'rate' => $rate,
-        ];
     }
 }
