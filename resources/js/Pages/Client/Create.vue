@@ -21,11 +21,11 @@ import StyledLink from "@/Components/StyledLink.vue"
               :href="$page.props.backLink"
               icon="fa-solid fa-xmark"
               variant="close"
+              dusk="close"
             />
           </div>
           <ClientForm
             :submitRoute="route('clients.store')"
-            :back-link="$page.props.backLink"
           />
         </div>
       </div>

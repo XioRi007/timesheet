@@ -80,6 +80,8 @@ const submit = async () => {
   }
 }
 const updateTotal = () => {
+  console.log(form.rate);
+  console.log(form.hrs);
   form.total = (form.rate * form.hrs)
 }
 const update = () => {
@@ -103,13 +105,14 @@ const changeUrl = (e) => {
 </script>
 
 <template>
-  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
+  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit" dusk="form">
 
     <div>
       <InputLabel for="date" value="Date"/>
       <DatePicker
         class="w-full"
         v-model="form.date"
+        dusk="date"
       />
       <InputError :message="form.errors.date" class="mt-2"/>
     </div>
@@ -120,7 +123,9 @@ const changeUrl = (e) => {
               v-model="form.developer_id"
               class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
               name="developer"
-              @change="changeUrl">
+              @change="changeUrl"
+              dusk="developer_id"
+      >
         <option v-for="developer in $page.props.developers" :value="developer.id">{{ developer.name }}</option>
       </select>
       <InputError :message="form.errors.developer_id" class="mt-2"/>
@@ -132,7 +137,9 @@ const changeUrl = (e) => {
               v-model="form.project_id"
               class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full"
               name="project"
-              @change="changeUrl">
+              @change="changeUrl"
+              dusk="project_id"
+      >
         <option v-for="project in $page.props.projects" :value="project.id">{{ project.name }}</option>
       </select>
       <InputError :message="form.errors.project_id" class="mt-2"/>
@@ -140,15 +147,16 @@ const changeUrl = (e) => {
 
 
     <div>
-      <InputLabel for="rate" value="Hours"/>
+      <InputLabel for="hrs" value="Hours"/>
       <TextInput
         id="hrs"
         v-model="form.hrs"
-        autocomplete="rate"
+        autocomplete="hrs"
         class="mt-1 block w-full"
         step=".01"
         type="number"
-        @input="updateTotal"
+        @change="updateTotal"
+        dusk="hrs"
       />
       <InputError :message="form.errors.hrs" class="mt-2"/>
     </div>
@@ -162,7 +170,8 @@ const changeUrl = (e) => {
       class="mt-1 block w-full"
       step=".01"
       type="number"
-      @input="updateTotal"
+      @change="updateTotal"
+      dusk="rate"
     />
     <InputError :message="form.errors.rate" class="mt-2"/>
   </div>
@@ -172,10 +181,11 @@ const changeUrl = (e) => {
     <TextInput
       id="total"
       v-model="form.total"
-      autocomplete="rate"
+      autocomplete="total"
       class="mt-1 block w-full"
       step=".01"
       type="number"
+      dusk="total"
     />
     <InputError :message="form.errors.total" class="mt-2"/>
   </div>
@@ -185,6 +195,7 @@ const changeUrl = (e) => {
       v-model="form.status"
       active-text="Paid"
       not-active-text="Unpaid"
+      dusk="status"
     />
   </div>
 </div>
@@ -194,6 +205,7 @@ const changeUrl = (e) => {
       <StyledButton
         :disabled="form.processing"
         variant="primary"
+        dusk="submit"
       >
         Save
       </StyledButton>
@@ -201,6 +213,7 @@ const changeUrl = (e) => {
         :disabled="form.processing"
         variant="secondary"
         @click.prevent="form.reset()"
+        dusk="reset"
       >
         Reset
       </StyledButton>

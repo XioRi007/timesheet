@@ -27,6 +27,7 @@ const props = defineProps({
               :href="$page.props.backLink"
               icon="fa-solid fa-xmark"
               variant="close"
+              dusk="close"
             />
           </div>
           <ProjectForm

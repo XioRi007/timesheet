@@ -66,6 +66,7 @@ const computedStyles = computed(()=>{
 
 <template>
   <form
+    dusk="filter"
     novalidate
     class="flex mb-6 items-end grid"
     :style="computedStyles"
@@ -80,6 +81,7 @@ const computedStyles = computed(()=>{
         class="mt-1 block w-full"
         step=".01"
         type="number"
+        :dusk="column.real"
       />
 
       <select
@@ -87,6 +89,7 @@ const computedStyles = computed(()=>{
         :id="column.real"
         v-model="form[column.real]"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+        :dusk="column.real"
       >
         <option :value=null selected></option>
         <option v-for="item in column.data" :value="item">{{ item ? statusText[0]: statusText[1]}}</option>
@@ -97,6 +100,7 @@ const computedStyles = computed(()=>{
         :id="column.real"
         v-model="form[column.real]"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+        :dusk="column.real"
       >
         <option :value=null selected></option>
         <option :value="true">{{ statusText[0] }}</option>
@@ -108,6 +112,7 @@ const computedStyles = computed(()=>{
         v-else-if="column.type === 'select_model'"
         v-model="form[column.real]"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+        :dusk="column.real"
       >
         <option :value=null selected></option>
         <option v-for="item in column.data" :value="item.id">{{ item.name }}</option>
@@ -119,6 +124,7 @@ const computedStyles = computed(()=>{
         v-else-if="column.type === 'select'"
         v-model="form[column.real]"
         class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mt-1 block w-full"
+        :dusk="column.real"
       >
         <option :value=null selected></option>
         <option v-for="item in column.data" :value="item">{{ item }}</option>
@@ -129,6 +135,7 @@ const computedStyles = computed(()=>{
         v-else-if="column.type === 'date'"
         v-model="form[column.real]"
         class="mt-1 block w-full"
+        :dusk="column.real"
       />
 
       <TextInput
@@ -138,6 +145,7 @@ const computedStyles = computed(()=>{
         :autocomplete="column.real"
         class="mt-1 block w-full"
         type="text"
+        :dusk="column.real"
       />
     </div>
     <div class="flex justify-between">
@@ -154,6 +162,7 @@ const computedStyles = computed(()=>{
         class="h-10 w-2/4"
         @click="reset"
         variant="secondary"
+        dusk="reset"
       >
         Reset
       </StyledButton>

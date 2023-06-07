@@ -9,7 +9,7 @@ defineProps({
 })
 </script>
 <template>
-  <div v-if="links.length > 3">
+  <div v-if="links.length > 3" dusk="pagination">
     <div class="flex flex-wrap -mb-1 justify-center mt-8">
       <template v-for="(link, p) in links" :key="p">
         <div v-if="link.url === null"

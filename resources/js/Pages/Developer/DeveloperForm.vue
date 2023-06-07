@@ -75,7 +75,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
+  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit" dusk="form">
 
     <div>
       <InputLabel for="name" value="First Name"/>
@@ -86,6 +86,7 @@ const submit = async () => {
         autofocus
         class="mt-1 block w-full"
         type="text"
+        dusk="first_name"
       />
       <InputError :message="form.errors.first_name" class="mt-2"/>
     </div>
@@ -98,6 +99,7 @@ const submit = async () => {
         autocomplete="last_name"
         class="mt-1 block w-full"
         type="text"
+        dusk="last_name"
       />
       <InputError :message="form.errors.last_name" class="mt-2"/>
     </div>
@@ -111,6 +113,7 @@ const submit = async () => {
           autocomplete="email"
           class="mt-1 block w-full"
           type="text"
+          dusk="email"
         />
         <InputError :message="form.errors.email" class="mt-2"/>
       </div>
@@ -123,6 +126,7 @@ const submit = async () => {
           autocomplete="password"
           class="mt-1 block w-full"
           type="password"
+          dusk="password"
         />
         <InputError :message="form.errors.password" class="mt-2"/>
       </div>
@@ -137,6 +141,7 @@ const submit = async () => {
         class="mt-1 block w-full"
         step="0.01"
         type="number"
+        dusk="rate"
       />
       <InputError :message="form.errors.rate" class="mt-2"/>
     </div>
@@ -146,6 +151,7 @@ const submit = async () => {
         v-model="form.status"
         active-text="Active"
         not-active-text="Inactive"
+        dusk="status"
       />
     </div>
 
@@ -153,6 +159,7 @@ const submit = async () => {
       <StyledButton
         :disabled="form.processing"
         variant="primary"
+        dusk="submit"
       >
         Save
       </StyledButton>
@@ -160,6 +167,7 @@ const submit = async () => {
         :disabled="form.processing"
         variant="secondary"
         @click.prevent="form.reset()"
+        dusk="reset"
       >
         Reset
       </StyledButton>

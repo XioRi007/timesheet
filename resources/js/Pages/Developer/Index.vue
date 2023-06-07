@@ -27,6 +27,7 @@ useToast();
               :href="route('developers.create')"
               icon="fa-solid fa-plus"
               variant="add"
+              dusk="create"
             />
             <DataTable
               :data="$page.props.developers.data"

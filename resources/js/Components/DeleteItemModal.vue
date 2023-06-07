@@ -28,7 +28,7 @@ defineProps({
 
 <template>
   <Modal>
-    <div class="p-6">
+    <div class="p-6" dusk="delete_modal">
       <h2 class="text-lg font-medium text-gray-900 text-center">
         Are you sure you want to delete this {{ entityName }}?
       </h2>
@@ -37,6 +37,7 @@ defineProps({
         <StyledButton
           variant="secondary"
           @click="close"
+          dusk="close_modal"
         >
           Cancel
         </StyledButton>
@@ -44,6 +45,7 @@ defineProps({
           variant="danger"
           class="ml-3"
           @click="deleteItem(item)"
+          dusk="delete_item"
           >
           Delete
         </StyledButton>

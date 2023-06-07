@@ -28,12 +28,12 @@ const props = defineProps({
               :href="$page.props.backLink"
               icon="fa-solid fa-xmark"
               variant="close"
+              dusk="close"
             />
           </div>
           <ClientForm
             :client="client"
             :submitRoute="route('clients.update', props.client.id)"
-            :back-link="$page.props.backLink"
           />
         </div>
       </div>

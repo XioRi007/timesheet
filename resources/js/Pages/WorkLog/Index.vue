@@ -27,6 +27,7 @@ useToast();
               :href="route('worklogs.create')"
               icon="fa-solid fa-plus"
               variant="add"
+              dusk="create"
             />
             <DataTable
               :data="$page.props.worklogs.data"

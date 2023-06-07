@@ -58,13 +58,13 @@ const submit = async () => {
 </script>
 
 <template>
-  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
+  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit" dusk="form">
 
     <div>
       <InputLabel for="project" value="Client"/>
       <select id="project"
               v-model="form.client_id"
-              class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full">
+              class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm w-full" dusk="client_id" @change="console.log($event.target.value)">
         <option v-for="client in $page.props.clients" :value="client.id">{{ client.name }}</option>
       </select>
       <InputError :message="form.errors.client_id" class="mt-2"/>
@@ -79,6 +79,7 @@ const submit = async () => {
         autofocus
         class="mt-1 block w-full"
         type="text"
+        dusk="name"
       />
       <InputError :message="form.errors.name" class="mt-2"/>
     </div>
@@ -92,6 +93,7 @@ const submit = async () => {
         class="mt-1 block w-full"
         step="0.01"
         type="number"
+        dusk="rate"
       />
       <InputError :message="form.errors.rate" class="mt-2"/>
     </div>
@@ -101,6 +103,7 @@ const submit = async () => {
         v-model="form.status"
         active-text="Active"
         not-active-text="Inactive"
+        dusk="status"
       />
     </div>
 
@@ -108,6 +111,7 @@ const submit = async () => {
       <StyledButton
         :disabled="form.processing"
         variant="primary"
+        dusk="submit"
       >
         Save
       </StyledButton>
@@ -115,6 +119,7 @@ const submit = async () => {
         :disabled="form.processing"
         variant="secondary"
         @click.prevent="form.reset()"
+        dusk="reset"
       >
         Reset
       </StyledButton>

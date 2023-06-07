@@ -87,12 +87,12 @@ const sortByColumn = (column) => {
   <div v-if="data.length !== 0" class="border rounded-lg overflow-hidden dark:border-gray-700">
     <table class="w-full text-sm text-left text-gray-300 rounded-lg table-fixed	">
       <thead class="bg-gray-700 text-gray-300">
-      <tr>
-        <th v-for="(column, index) in columns" class="px-6 py-4 cursor-pointer" scope="col" @click="sortByColumn(column)">
+      <tr dusk="sorting">
+        <th v-for="(column, index) in columns" class="px-6 py-4 cursor-pointer" scope="col" @click="sortByColumn(column)" :dusk="column" >
           {{ formatColumnName(columnNames[index]) }}
           <span class="" v-if="props.column === column">
-            <font-awesome-icon v-if="ascending" icon="fa-solid fa-sort-up" class="align-bottom"/>
-            <font-awesome-icon v-if="!ascending" icon="fa-solid fa-sort-down" class="align-text-top"/>
+            <font-awesome-icon v-if="ascending" icon="fa-solid fa-sort-up" class="align-bottom" dusk="up_icon"/>
+            <font-awesome-icon v-if="!ascending" icon="fa-solid fa-sort-down" class="align-text-top" dusk="down_icon"/>
           </span>
         </th>
         <th v-if="hasActions" class="px-6 py-4" scope="col">
@@ -112,10 +112,10 @@ const sortByColumn = (column) => {
           }}
         </th>
         <th v-if="hasActions" class="px-0 py-4 font-medium whitespace-nowrap text-white" scope="row">
-          <Link :href="route(editActionLink, item.id)" class="mx-6" title="Edit">
+          <Link :href="route(editActionLink, item.id)" class="mx-6" title="Edit" dusk="edit">
             <font-awesome-icon class="text-blue-400" icon="fa-solid fa-pencil"/>
           </Link>
-          <button title="Delete" @click="deletedItem = item.id">
+          <button title="Delete" @click="deletedItem = item.id" dusk="delete">
             <font-awesome-icon class="text-red-600" icon="fa-solid fa-trash-can"/>
           </button>
         </th>

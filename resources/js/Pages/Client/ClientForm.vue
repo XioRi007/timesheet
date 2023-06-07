@@ -35,6 +35,7 @@ const schema = yup.object({
 const form = useForm(props.client)
 const submit = async () => {
   try {
+    console.log(form.data())
     form.clearErrors()
     await schema.validate(form, {abortEarly: false})
     form.status = form.status === true
@@ -57,7 +58,7 @@ const submit = async () => {
 <template>
   <div class="bg-white overflow-hidden mb-6 flex justify-end">
   </div>
-  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit">
+  <form class="mt-6 space-y-6" novalidate @submit.prevent="submit" dusk="form">
     <div>
       <InputLabel for="name" value="Name"/>
       <TextInput
@@ -67,6 +68,7 @@ const submit = async () => {
         autofocus
         class="mt-1 block w-full"
         type="text"
+        dusk="name"
       />
       <InputError :message="form.errors.name" class="mt-2"/>
     </div>
@@ -80,6 +82,7 @@ const submit = async () => {
         class="mt-1 block w-full"
         step="0.01"
         type="number"
+        dusk="rate"
       />
       <InputError :message="form.errors.rate" class="mt-2"/>
     </div>
@@ -89,6 +92,7 @@ const submit = async () => {
         v-model="form.status"
         active-text="Active"
         not-active-text="Inactive"
+        dusk="status"
       />
     </div>
 
@@ -96,6 +100,7 @@ const submit = async () => {
       <StyledButton
         :disabled="form.processing"
         variant="primary"
+        dusk="submit"
       >
         Save
       </StyledButton>
@@ -103,6 +108,7 @@ const submit = async () => {
         :disabled="form.processing"
         variant="secondary"
         @click.prevent="form.reset()"
+        dusk="reset"
       >
         Reset
       </StyledButton>
